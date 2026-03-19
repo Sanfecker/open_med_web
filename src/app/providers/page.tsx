@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 import type { Provider } from '@/types';
@@ -89,7 +89,7 @@ function ProviderCard({ provider }: { provider: Provider }) {
   );
 }
 
-export default function ProvidersPage() {
+function ProvidersContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [providers, setProviders] = useState<Provider[]>([]);
@@ -386,5 +386,17 @@ export default function ProvidersPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ProvidersPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-red-50 via-amber-50 to-green-50 flex items-center justify-center">
+        <div className="text-gray-600">Loading...</div>
+      </div>
+    }>
+      <ProvidersContent />
+    </Suspense>
   );
 }
