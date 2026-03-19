@@ -33,31 +33,29 @@ function LoginForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50 via-amber-50 to-green-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
       <div className="max-w-md w-full">
         {/* Logo */}
-        <div className="text-center mb-8">
-          <a href="/" className="inline-flex items-center gap-2 mb-4">
-            <div className="w-12 h-12 bg-red-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">
-              O
-            </div>
-            <span className="text-2xl font-bold text-gray-900">OpenMed</span>
+        <div className="text-center mb-12">
+          <a href="/" className="inline-flex items-center gap-3 mb-6">
+            <img src="/logo.png" alt="OpenMed" className="h-12 w-auto" />
+            <span className="text-2xl font-bold text-secondary-600">OpenMed</span>
           </a>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h1>
           <p className="text-gray-600">Sign in to manage your appointments</p>
         </div>
 
         {/* Login Form */}
-        <div className="bg-white rounded-2xl shadow-xl p-8">
+        <div className="bg-white rounded-lg shadow-sm p-8 border border-gray-200">
           {error && (
-            <div className="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md">
+            <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
               {error}
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-900 mb-2">
                 Email Address
               </label>
               <input
@@ -66,13 +64,13 @@ function LoginForm() {
                 required
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent text-gray-900"
                 placeholder="you@example.com"
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-900 mb-2">
                 Password
               </label>
               <input
@@ -81,7 +79,7 @@ function LoginForm() {
                 required
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent text-gray-900"
                 placeholder="••••••••"
               />
             </div>
@@ -89,7 +87,7 @@ function LoginForm() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 font-semibold disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+              className="w-full bg-primary-600 text-white py-3 rounded-lg hover:bg-primary-700 font-semibold disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
             >
               {loading ? 'Signing in...' : 'Sign In'}
             </button>
@@ -100,7 +98,7 @@ function LoginForm() {
               Don't have an account?{' '}
               <a
                 href={`/auth/register${redirectTo !== '/dashboard' ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`}
-                className="text-red-600 hover:text-red-700 font-medium"
+                className="text-primary-600 hover:text-primary-700 font-medium"
               >
                 Sign up
               </a>
@@ -108,7 +106,7 @@ function LoginForm() {
           </div>
         </div>
 
-        <div className="mt-6 text-center">
+        <div className="mt-8 text-center">
           <a href="/" className="text-gray-600 hover:text-gray-900">
             ← Back to home
           </a>
@@ -121,7 +119,7 @@ function LoginForm() {
 export default function LoginPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gradient-to-br from-red-50 via-amber-50 to-green-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-gray-600">Loading...</div>
       </div>
     }>

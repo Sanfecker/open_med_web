@@ -10,10 +10,10 @@ export default function OnboardingSuccessPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50 via-amber-50 to-green-50 flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-12">
       <div className="max-w-2xl w-full">
         {/* Success Card */}
-        <div className={`bg-white rounded-2xl shadow-xl p-12 text-center transition-all duration-700 ${
+        <div className={`bg-white rounded-lg shadow-sm p-12 text-center border border-gray-200 transition-all duration-700 ${
           mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
         }`}>
           {/* Success Icon */}
@@ -44,7 +44,7 @@ export default function OnboardingSuccessPage() {
           </p>
 
           {/* Approval Notice */}
-          <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-6 mb-8">
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
             <div className="flex items-start gap-3">
               <div className="flex-shrink-0">
                 <svg
@@ -71,37 +71,37 @@ export default function OnboardingSuccessPage() {
           </div>
 
           {/* Next Steps */}
-          <div className="bg-gray-50 rounded-xl p-6 mb-8">
+          <div className="bg-gray-50 rounded-lg p-6 mb-8">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
               What's Next?
             </h3>
             <div className="space-y-4 text-left">
               <div className="flex gap-3">
-                <span className="flex-shrink-0 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-semibold text-sm">
+                <span className="flex-shrink-0 w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center font-semibold text-sm">
                   1
                 </span>
                 <div>
-                  <p className="text-gray-700">
+                  <p className="text-gray-900">
                     <strong>Wait for approval:</strong> We'll review your credentials and notify you via email.
                   </p>
                 </div>
               </div>
               <div className="flex gap-3">
-                <span className="flex-shrink-0 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-semibold text-sm">
+                <span className="flex-shrink-0 w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center font-semibold text-sm">
                   2
                 </span>
                 <div>
-                  <p className="text-gray-700">
+                  <p className="text-gray-900">
                     <strong>Download the mobile app:</strong> Once approved, use the OpenMed Provider mobile app to manage your practice.
                   </p>
                 </div>
               </div>
               <div className="flex gap-3">
-                <span className="flex-shrink-0 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-semibold text-sm">
+                <span className="flex-shrink-0 w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center font-semibold text-sm">
                   3
                 </span>
                 <div>
-                  <p className="text-gray-700">
+                  <p className="text-gray-900">
                     <strong>Start accepting patients:</strong> Add your services, set your availability, and begin receiving bookings!
                   </p>
                 </div>
@@ -110,29 +110,29 @@ export default function OnboardingSuccessPage() {
           </div>
 
           {/* Mobile App Section */}
-          <div className="bg-gradient-to-r from-red-600 to-red-700 rounded-xl p-8 text-white mb-8">
+          <div className="bg-secondary-600 rounded-lg p-8 text-white mb-8">
             <div className="text-5xl mb-4">📱</div>
             <h3 className="text-2xl font-bold mb-3">
               OpenMed Provider App
             </h3>
-            <p className="text-red-100 mb-6">
+            <p className="text-white/80 mb-6">
               Manage your practice on the go with our mobile app
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
               <div className="bg-white/10 backdrop-blur rounded-lg p-4">
                 <div className="text-2xl mb-2">📱</div>
                 <div className="font-semibold">iOS</div>
-                <div className="text-red-100 text-xs">Run with Flutter</div>
+                <div className="text-white/70 text-xs">Run with Flutter</div>
               </div>
               <div className="bg-white/10 backdrop-blur rounded-lg p-4">
                 <div className="text-2xl mb-2">🤖</div>
                 <div className="font-semibold">Android</div>
-                <div className="text-red-100 text-xs">Run with Flutter</div>
+                <div className="text-white/70 text-xs">Run with Flutter</div>
               </div>
               <div className="bg-white/10 backdrop-blur rounded-lg p-4">
                 <div className="text-2xl mb-2">💻</div>
                 <div className="font-semibold">Windows</div>
-                <div className="text-red-100 text-xs">Run with Flutter</div>
+                <div className="text-white/70 text-xs">Run with Flutter</div>
               </div>
             </div>
           </div>
@@ -140,7 +140,7 @@ export default function OnboardingSuccessPage() {
           {/* Action Button */}
           <a
             href="/"
-            className="inline-block bg-red-600 text-white px-8 py-4 rounded-lg hover:bg-red-700 font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
+            className="inline-block bg-primary-600 text-white px-8 py-4 rounded-lg hover:bg-primary-700 font-semibold transition-all"
           >
             Back to Home
           </a>

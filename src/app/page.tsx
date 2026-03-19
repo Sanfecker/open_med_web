@@ -76,28 +76,26 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Header */}
-      <header className="border-b border-gray-200 bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+      <header className="border-b border-gray-200 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex justify-between items-center">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-red-600 to-red-700 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-md">
-              O
-            </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-red-600 to-red-700 bg-clip-text text-transparent">
+            <img src="/logo.png" alt="OpenMed" className="h-10 w-auto" />
+            <span className="text-2xl font-bold text-secondary-600">
               OpenMed
             </span>
           </div>
-          <nav className="flex gap-3">
+          <nav className="flex gap-4">
             {!isAuthenticated && (
               <>
                 <a
                   href="/auth/login"
-                  className="text-gray-700 hover:text-gray-900 px-4 py-2 rounded-lg hover:bg-gray-100 transition-all font-medium"
+                  className="text-gray-600 hover:text-gray-900 px-4 py-2 rounded-lg hover:bg-gray-50 transition-all font-medium"
                 >
                   Sign In
                 </a>
                 <a
                   href="/auth/register"
-                  className="bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-2 rounded-lg hover:from-red-700 hover:to-red-800 font-medium shadow-md hover:shadow-lg transition-all transform hover:scale-105"
+                  className="bg-primary-600 text-white px-6 py-2 rounded-lg hover:bg-primary-700 font-medium transition-all"
                 >
                   Sign Up
                 </a>
@@ -106,7 +104,7 @@ export default function Home() {
             {isAuthenticated && (
               <a
                 href="/dashboard"
-                className="bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-2 rounded-lg hover:from-red-700 hover:to-red-800 font-medium shadow-md hover:shadow-lg transition-all transform hover:scale-105"
+                className="bg-primary-600 text-white px-6 py-2 rounded-lg hover:bg-primary-700 font-medium transition-all"
               >
                 Dashboard
               </a>
@@ -117,27 +115,27 @@ export default function Home() {
 
       {/* Hero Section */}
       <main className="flex-1">
-        <div className="bg-gradient-to-br from-red-50 via-amber-50 to-green-50 py-16 px-4 sm:px-6 lg:px-8">
+        <div className="bg-gray-50 py-20 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
             {/* Hero Text */}
-            <div className="text-center mb-16">
-              <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+            <div className="text-center mb-20">
+              <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-8 leading-tight">
                 Find Quality Healthcare
                 <br />
-                <span className="bg-gradient-to-r from-red-600 to-red-700 bg-clip-text text-transparent">
+                <span className="text-primary-600">
                   At The Right Price
                 </span>
               </h1>
-              <p className="text-xl md:text-2xl text-gray-600 mb-4 max-w-3xl mx-auto">
+              <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
                 Compare prices and book appointments with verified medical providers across Ghana
               </p>
             </div>
 
             {/* View All Providers - Prominent CTA */}
-            <div className="max-w-2xl mx-auto mb-16">
+            <div className="max-w-2xl mx-auto mb-20">
               <button
                 onClick={() => router.push('/providers')}
-                className="w-full bg-gradient-to-r from-red-600 to-red-700 text-white py-6 rounded-2xl hover:from-red-700 hover:to-red-800 font-semibold text-xl shadow-2xl hover:shadow-3xl transition-all transform hover:scale-105 active:scale-95 flex items-center justify-center gap-3 group"
+                className="w-full bg-primary-600 text-white py-6 rounded-lg hover:bg-primary-700 font-semibold text-xl shadow-sm transition-all flex items-center justify-center gap-3 group"
               >
                 <span>View All Providers</span>
                 <svg
@@ -167,14 +165,14 @@ export default function Home() {
                   <button
                     key={type.value}
                     onClick={() => router.push(`/providers?providerType=${type.value}`)}
-                    className={`bg-gradient-to-br ${type.color} border-2 p-6 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 text-left group`}
+                    className="bg-white border border-gray-200 p-8 rounded-lg hover:border-primary-600 transition-all text-left group"
                   >
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="text-5xl mb-2 transform group-hover:scale-110 transition-transform">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="text-4xl">
                         {type.icon}
                       </div>
                       <svg
-                        className="w-5 h-5 text-gray-400 transform group-hover:translate-x-1 group-hover:text-gray-600 transition-all"
+                        className="w-5 h-5 text-gray-400 transform group-hover:translate-x-1 group-hover:text-primary-600 transition-all"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -196,20 +194,20 @@ export default function Home() {
         </div>
 
         {/* Features Section */}
-        <div className="py-20 bg-white">
+        <div className="py-24 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-4xl font-bold text-center text-gray-900 mb-4">
+            <h2 className="text-4xl font-bold text-center text-gray-900 mb-6">
               Why Choose OpenMed?
             </h2>
-            <p className="text-center text-gray-600 text-lg mb-16 max-w-2xl mx-auto">
+            <p className="text-center text-gray-600 text-lg mb-20 max-w-2xl mx-auto">
               We make healthcare accessible, transparent, and convenient for everyone
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
               <div className="text-center group">
-                <div className="w-20 h-20 bg-gradient-to-br from-red-100 to-red-200 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg transform group-hover:scale-110 transition-transform">
+                <div className="w-20 h-20 bg-gray-50 rounded-lg flex items-center justify-center mx-auto mb-6">
                   <span className="text-4xl">💰</span>
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">
                   Compare Prices
                 </h3>
                 <p className="text-gray-600 text-lg leading-relaxed">
@@ -217,10 +215,10 @@ export default function Home() {
                 </p>
               </div>
               <div className="text-center group">
-                <div className="w-20 h-20 bg-gradient-to-br from-amber-100 to-amber-200 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg transform group-hover:scale-110 transition-transform">
+                <div className="w-20 h-20 bg-gray-50 rounded-lg flex items-center justify-center mx-auto mb-6">
                   <span className="text-4xl">✅</span>
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">
                   Verified Providers
                 </h3>
                 <p className="text-gray-600 text-lg leading-relaxed">
@@ -228,10 +226,10 @@ export default function Home() {
                 </p>
               </div>
               <div className="text-center group">
-                <div className="w-20 h-20 bg-gradient-to-br from-green-100 to-green-200 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg transform group-hover:scale-110 transition-transform">
+                <div className="w-20 h-20 bg-gray-50 rounded-lg flex items-center justify-center mx-auto mb-6">
                   <span className="text-4xl">📅</span>
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">
                   Easy Booking
                 </h3>
                 <p className="text-gray-600 text-lg leading-relaxed">
@@ -243,18 +241,18 @@ export default function Home() {
         </div>
 
         {/* CTA Section for Providers */}
-        <div className="bg-gradient-to-r from-red-600 via-red-700 to-red-800 py-20">
+        <div className="bg-secondary-600 py-24">
           <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-            <div className="text-6xl mb-6">👨‍⚕️</div>
-            <h2 className="text-4xl font-bold text-white mb-4">
+            <div className="text-6xl mb-8">👨‍⚕️</div>
+            <h2 className="text-4xl font-bold text-white mb-6">
               Are you a medical provider?
             </h2>
-            <p className="text-xl text-red-100 mb-10 leading-relaxed">
+            <p className="text-xl text-white/80 mb-12 leading-relaxed">
               Join OpenMed and reach more patients. Grow your practice with our platform.
             </p>
             <a
               href="/auth/register?role=provider"
-              className="inline-block bg-white text-red-600 px-10 py-4 rounded-xl font-bold text-lg hover:bg-gray-100 transition-all shadow-2xl transform hover:scale-105 active:scale-95"
+              className="inline-block bg-primary-600 text-white px-10 py-4 rounded-lg font-bold text-lg hover:bg-primary-700 transition-all"
             >
               Register as Provider
             </a>
@@ -263,13 +261,11 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-gray-400 py-12">
+      <footer className="bg-secondary-600 text-white/60 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-6">
             <div className="flex items-center justify-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-gradient-to-br from-red-600 to-red-700 rounded-xl flex items-center justify-center text-white font-bold text-xl">
-                O
-              </div>
+              <img src="/logo.png" alt="OpenMed" className="h-10 w-auto" />
               <span className="text-2xl font-bold text-white">OpenMed</span>
             </div>
             <p className="text-lg">Quality healthcare for all Ghanaians</p>

@@ -113,13 +113,11 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex justify-between items-center">
-            <a href="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center text-white font-bold">
-                O
-              </div>
-              <span className="text-xl font-semibold text-gray-900">OpenMed</span>
+            <a href="/" className="flex items-center gap-3">
+              <img src="/logo.png" alt="OpenMed" className="h-10 w-auto" />
+              <span className="text-xl font-semibold text-secondary-600">OpenMed</span>
             </a>
             <nav className="flex gap-4 items-center">
               <a href="/providers" className="text-gray-600 hover:text-gray-900">
@@ -136,24 +134,24 @@ export default function DashboardPage() {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="mb-12">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">My Dashboard</h1>
           <p className="text-gray-600">Manage your appointments and bookings</p>
         </div>
 
         {isProvider ? (
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-12 text-center">
-            <div className="text-6xl mb-4">📱</div>
+            <div className="text-6xl mb-6">📱</div>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">
               Provider Dashboard
             </h2>
-            <p className="text-gray-700 mb-6 max-w-2xl mx-auto">
+            <p className="text-gray-900 mb-8 max-w-2xl mx-auto">
               Welcome! As a medical provider, please use the <strong>OpenMed Mobile App</strong> to manage your practice, view bookings, and update your schedule.
             </p>
-            <div className="bg-white rounded-lg p-6 max-w-md mx-auto mb-6">
-              <h3 className="font-semibold text-gray-900 mb-3">Download the Mobile App:</h3>
-              <ul className="text-left space-y-2 text-gray-700">
+            <div className="bg-white rounded-lg p-6 max-w-md mx-auto mb-6 shadow-sm">
+              <h3 className="font-semibold text-gray-900 mb-4">Download the Mobile App:</h3>
+              <ul className="text-left space-y-3 text-gray-900">
                 <li>📱 <strong>iOS:</strong> Run with Flutter on iPhone/iPad</li>
                 <li>🤖 <strong>Android:</strong> Run with Flutter on Android devices</li>
                 <li>💻 <strong>Windows:</strong> Run with Flutter on Windows</li>
@@ -164,8 +162,8 @@ export default function DashboardPage() {
             </p>
           </div>
         ) : loading ? (
-          <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto mb-4"></div>
+          <div className="text-center py-16">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
             <p className="text-gray-600">Loading your bookings...</p>
           </div>
         ) : error ? (
@@ -176,21 +174,21 @@ export default function DashboardPage() {
           <div className="space-y-8">
             {/* Upcoming Bookings */}
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">
                 Upcoming Appointments
               </h2>
               {upcomingBookings.length === 0 ? (
-                <div className="bg-white rounded-lg shadow-md p-12 text-center">
-                  <div className="text-6xl mb-4">📅</div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                <div className="bg-white rounded-lg shadow-sm p-16 text-center border border-gray-200">
+                  <div className="text-6xl mb-6">📅</div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-3">
                     No upcoming appointments
                   </h3>
-                  <p className="text-gray-600 mb-6">
+                  <p className="text-gray-600 mb-8">
                     Book an appointment with a provider to get started
                   </p>
                   <a
                     href="/providers"
-                    className="inline-block bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 font-medium"
+                    className="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 font-medium"
                   >
                     Find Providers
                   </a>
@@ -200,7 +198,7 @@ export default function DashboardPage() {
                   {upcomingBookings.map((booking) => (
                     <div
                       key={booking.id}
-                      className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
+                      className="bg-white rounded-lg shadow-sm p-6 border border-gray-200"
                     >
                       <div className="flex justify-between items-start mb-4">
                         <div>
@@ -221,24 +219,24 @@ export default function DashboardPage() {
                         </span>
                       </div>
 
-                      <div className="space-y-2 mb-4">
-                        <div className="flex items-center text-gray-700">
+                      <div className="space-y-3 mb-4">
+                        <div className="flex items-center text-gray-900">
                           <span className="font-medium mr-2">📅</span>
                           {format(new Date(booking.date), 'EEEE, MMMM d, yyyy')}
                         </div>
-                        <div className="flex items-center text-gray-700">
+                        <div className="flex items-center text-gray-900">
                           <span className="font-medium mr-2">🕐</span>
                           {booking.startTime} - {booking.endTime}
                         </div>
-                        <div className="flex items-center text-gray-700">
+                        <div className="flex items-center text-gray-900">
                           <span className="font-medium mr-2">💰</span>
                           {booking.currency} {booking.price}
                         </div>
                       </div>
 
                       {booking.notes && (
-                        <div className="mb-4 p-3 bg-gray-50 rounded-md">
-                          <p className="text-sm text-gray-600">
+                        <div className="mb-4 p-3 bg-gray-50 rounded-lg">
+                          <p className="text-sm text-gray-900">
                             <span className="font-medium">Notes:</span> {booking.notes}
                           </p>
                         </div>
@@ -248,7 +246,7 @@ export default function DashboardPage() {
                         <button
                           onClick={() => handleCancelBooking(booking.id)}
                           disabled={cancellingId === booking.id}
-                          className="flex-1 px-4 py-2 border border-red-600 text-red-600 rounded-md hover:bg-red-50 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="flex-1 px-4 py-2 border border-red-600 text-red-600 rounded-lg hover:bg-red-50 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           {cancellingId === booking.id ? 'Cancelling...' : 'Cancel'}
                         </button>
@@ -262,14 +260,14 @@ export default function DashboardPage() {
             {/* Past Bookings */}
             {pastBookings.length > 0 && (
               <div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6">
                   Past Appointments
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {pastBookings.map((booking) => (
                     <div
                       key={booking.id}
-                      className="bg-white rounded-lg shadow-md p-6 opacity-75"
+                      className="bg-white rounded-lg shadow-sm p-6 opacity-75 border border-gray-200"
                     >
                       <div className="flex justify-between items-start mb-4">
                         <div>
@@ -290,23 +288,23 @@ export default function DashboardPage() {
                         </span>
                       </div>
 
-                      <div className="space-y-2">
-                        <div className="flex items-center text-gray-700">
+                      <div className="space-y-3">
+                        <div className="flex items-center text-gray-900">
                           <span className="font-medium mr-2">📅</span>
                           {format(new Date(booking.date), 'EEEE, MMMM d, yyyy')}
                         </div>
-                        <div className="flex items-center text-gray-700">
+                        <div className="flex items-center text-gray-900">
                           <span className="font-medium mr-2">🕐</span>
                           {booking.startTime} - {booking.endTime}
                         </div>
-                        <div className="flex items-center text-gray-700">
+                        <div className="flex items-center text-gray-900">
                           <span className="font-medium mr-2">💰</span>
                           {booking.currency} {booking.price}
                         </div>
                       </div>
 
                       {booking.cancellationReason && (
-                        <div className="mt-4 p-3 bg-red-50 rounded-md">
+                        <div className="mt-4 p-3 bg-red-50 rounded-lg">
                           <p className="text-sm text-red-700">
                             <span className="font-medium">Reason:</span>{' '}
                             {booking.cancellationReason}

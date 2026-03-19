@@ -24,12 +24,12 @@ function CalendarDay({
     <button
       onClick={onClick}
       className={`
-        relative p-3 rounded-xl text-center transition-all duration-200 transform hover:scale-105
+        relative p-3 rounded-xl text-center transition-all duration-200
         ${isSelected
-          ? 'bg-gradient-to-br from-red-600 to-red-700 text-white shadow-lg'
+          ? 'bg-primary-600 text-white shadow-md'
           : isToday
           ? 'bg-gradient-to-br from-amber-50 to-amber-100 border-2 border-amber-400 text-gray-900'
-          : 'bg-white border-2 border-gray-200 text-gray-700 hover:border-red-300'
+          : 'bg-white border-2 border-gray-200 text-gray-700 hover:border-primary-600/40'
         }
       `}
     >
@@ -96,8 +96,8 @@ END:VCALENDAR`;
   };
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-red-50 via-amber-50 to-green-50 animate-gradient-shift flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full p-8 transform animate-[bounce_0.5s_ease-in-out]">
+    <div className="fixed inset-0 bg-white flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl shadow-lg max-w-md w-full p-8 transform animate-[bounce_0.5s_ease-in-out]">
         <div className="text-center">
           <div className="w-20 h-20 bg-gradient-to-br from-green-100 to-green-200 rounded-full flex items-center justify-center mx-auto mb-6 animate-[pulse_2s_ease-in-out_infinite]">
             <svg className="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -113,10 +113,10 @@ END:VCALENDAR`;
             Your appointment has been successfully booked
           </p>
 
-          <div className="bg-gradient-to-br from-red-50 to-amber-50 rounded-2xl p-6 mb-6 border-2 border-red-200">
+          <div className="bg-gray-50 rounded-xl p-6 mb-6 border-2 border-gray-200">
             <div className="space-y-3 text-left">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 bg-primary-600/10 rounded-lg flex items-center justify-center">
                   <span className="text-xl">🩺</span>
                 </div>
                 <div>
@@ -153,7 +153,7 @@ END:VCALENDAR`;
 
           <button
             onClick={handleAddToCalendar}
-            className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 rounded-xl hover:from-blue-700 hover:to-blue-800 font-semibold transition-all shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-2 mb-3"
+            className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 rounded-xl hover:from-blue-700 hover:to-blue-800 font-semibold transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 mb-3"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -287,7 +287,7 @@ export default function ProviderDetailPage() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 bg-gradient-to-br from-red-600 to-red-700 rounded-2xl flex items-center justify-center mx-auto mb-4 animate-[bounce_1s_ease-in-out_infinite]">
+          <div className="w-16 h-16 bg-primary-600 rounded-xl flex items-center justify-center mx-auto mb-4 animate-[bounce_1s_ease-in-out_infinite]">
             <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
           </div>
           <p className="text-gray-600 text-lg font-medium">Loading provider details...</p>
@@ -299,7 +299,7 @@ export default function ProviderDetailPage() {
   if (error || !provider) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
-        <div className="text-center bg-white p-12 rounded-3xl shadow-xl">
+        <div className="text-center bg-white p-12 rounded-2xl shadow-lg">
           <div className="text-7xl mb-6">❌</div>
           <h2 className="text-3xl font-bold text-gray-900 mb-3">
             Provider Not Found
@@ -307,7 +307,7 @@ export default function ProviderDetailPage() {
           <p className="text-gray-600 mb-8 text-lg">{error || 'This provider does not exist'}</p>
           <a
             href="/providers"
-            className="inline-block bg-gradient-to-r from-red-600 to-red-700 text-white px-8 py-3 rounded-xl hover:from-red-700 hover:to-red-800 font-semibold transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
+            className="inline-block bg-primary-600 hover:bg-primary-700 text-white px-8 py-3 rounded-xl font-semibold transition-all shadow-sm hover:shadow-md"
           >
             ← Back to Providers
           </a>
@@ -340,10 +340,8 @@ export default function ProviderDetailPage() {
       <header className="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <a href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 bg-gradient-to-br from-red-600 to-red-700 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-md group-hover:shadow-lg transition-all">
-              O
-            </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-red-600 to-red-700 bg-clip-text text-transparent">
+            <img src="/logo.png" alt="OpenMed" className="h-10 w-auto" />
+            <span className="text-2xl font-bold text-secondary-600">
               OpenMed
             </span>
           </a>
@@ -364,7 +362,7 @@ export default function ProviderDetailPage() {
           {/* Left Column - Provider Info & Services */}
           <div className="lg:col-span-2 space-y-6">
             {/* Provider Profile Card */}
-            <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
+            <div className="bg-white rounded-2xl shadow-md p-8 border border-gray-100">
               <div className="flex items-start justify-between mb-6">
                 <div className="flex-1">
                   <h1 className="text-4xl font-bold text-gray-900 mb-2">
@@ -372,7 +370,7 @@ export default function ProviderDetailPage() {
                   </h1>
                   <div className="flex items-center gap-3 mb-4">
                     {providerTypeLabel && (
-                      <span className="text-lg font-semibold text-red-600 uppercase tracking-wide">
+                      <span className="text-lg font-semibold text-primary-600 uppercase tracking-wide">
                         {providerTypeLabel}
                       </span>
                     )}
@@ -439,9 +437,9 @@ export default function ProviderDetailPage() {
             </div>
 
             {/* Services Card */}
-            <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
+            <div className="bg-white rounded-2xl shadow-md p-8 border border-gray-100">
               <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
                 </svg>
                 Services Offered
@@ -458,17 +456,17 @@ export default function ProviderDetailPage() {
                     <button
                       key={service.id}
                       onClick={() => setSelectedService(service)}
-                      className={`w-full text-left border-2 rounded-2xl p-6 transition-all duration-200 transform hover:scale-[1.02] ${
+                      className={`w-full text-left border-2 rounded-xl p-6 transition-all duration-200 ${
                         selectedService?.id === service.id
-                          ? 'border-red-600 bg-gradient-to-br from-red-50 to-amber-50 shadow-lg'
-                          : 'border-gray-200 hover:border-red-300 bg-white'
+                          ? 'border-primary-600 bg-primary-600/10 shadow-md'
+                          : 'border-gray-200 hover:border-primary-600/40 bg-white'
                       }`}
                     >
                       <div className="flex justify-between items-start">
                         <div className="flex-1">
                           <h3 className="text-xl font-bold text-gray-900 mb-2 flex items-center gap-2">
                             {selectedService?.id === service.id && (
-                              <div className="w-5 h-5 bg-red-600 rounded-full flex items-center justify-center">
+                              <div className="w-5 h-5 bg-primary-600 rounded-full flex items-center justify-center">
                                 <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
                                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                                 </svg>
@@ -489,7 +487,7 @@ export default function ProviderDetailPage() {
                           </div>
                         </div>
                         <div className="text-right ml-4">
-                          <div className="text-3xl font-bold text-red-600">
+                          <div className="text-3xl font-bold text-primary-600">
                             {service.currency} {service.price}
                           </div>
                         </div>
@@ -503,9 +501,9 @@ export default function ProviderDetailPage() {
 
           {/* Right Column - Booking Panel */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-3xl shadow-xl p-6 border border-gray-100 sticky top-24">
+            <div className="bg-white rounded-2xl shadow-md p-6 border border-gray-100 sticky top-24">
               <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
                 Book Appointment
@@ -513,10 +511,10 @@ export default function ProviderDetailPage() {
 
               {/* Selected Service Display */}
               {selectedService && (
-                <div className="mb-6 bg-gradient-to-br from-red-50 to-amber-50 border-2 border-red-200 rounded-2xl p-4">
+                <div className="mb-6 bg-primary-600/10 border-2 border-primary-600 rounded-xl p-4">
                   <div className="text-sm text-gray-600 mb-1">Selected Service</div>
                   <div className="font-bold text-gray-900 mb-1">{selectedService.name}</div>
-                  <div className="text-xl font-bold text-red-600">
+                  <div className="text-xl font-bold text-primary-600">
                     {selectedService.currency} {selectedService.price}
                   </div>
                 </div>
@@ -566,7 +564,7 @@ export default function ProviderDetailPage() {
                       </label>
                       {loadingSlots ? (
                         <div className="text-center py-8">
-                          <div className="w-10 h-10 border-4 border-red-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+                          <div className="w-10 h-10 border-4 border-primary-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
                         </div>
                       ) : timeSlots.filter(slot => !slot.isBooked).length === 0 ? (
                         <div className="text-center py-8 bg-gray-50 rounded-xl">
@@ -580,10 +578,10 @@ export default function ProviderDetailPage() {
                               <button
                                 key={idx}
                                 onClick={() => setSelectedTimeSlot(slot)}
-                                className={`px-4 py-3 text-sm font-semibold rounded-xl border-2 transition-all transform hover:scale-105 ${
+                                className={`px-4 py-3 text-sm font-semibold rounded-xl border-2 transition-all ${
                                   selectedTimeSlot?.startTime === slot.startTime
-                                    ? 'bg-gradient-to-br from-red-600 to-red-700 text-white border-red-600 shadow-lg'
-                                    : 'bg-white text-gray-700 border-gray-200 hover:border-red-300'
+                                    ? 'bg-primary-600 text-white border-primary-600 shadow-md'
+                                    : 'bg-white text-gray-700 border-gray-200 hover:border-primary-600/40'
                                 }`}
                               >
                                 {slot.startTime}
@@ -604,7 +602,7 @@ export default function ProviderDetailPage() {
                       onChange={(e) => setBookingNotes(e.target.value)}
                       placeholder="Any specific concerns or requests..."
                       rows={3}
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900 transition-all"
+                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-600 focus:border-primary-600 text-gray-900 transition-all"
                     />
                   </div>
 
@@ -612,7 +610,7 @@ export default function ProviderDetailPage() {
                   <button
                     onClick={handleBooking}
                     disabled={!selectedService || !selectedDate || !selectedTimeSlot}
-                    className="w-full bg-gradient-to-r from-red-600 to-red-700 text-white py-4 rounded-xl hover:from-red-700 hover:to-red-800 font-bold text-lg disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none disabled:hover:scale-100"
+                    className="w-full bg-primary-600 hover:bg-primary-700 text-white py-4 rounded-xl font-bold text-lg disabled:bg-gray-300 disabled:cursor-not-allowed transition-all shadow-md hover:shadow-lg"
                   >
                     {!selectedService
                       ? 'Select a Service'

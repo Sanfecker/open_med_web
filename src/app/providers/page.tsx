@@ -18,20 +18,20 @@ function ProviderCard({ provider }: { provider: Provider }) {
   return (
     <a
       href={`/providers/${provider.id}`}
-      className="group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 p-8 block border-2 border-gray-100 hover:border-red-200 transform hover:-translate-y-2 overflow-hidden"
+      className="group relative bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-500 p-8 block border-2 border-gray-100 hover:border-primary-600/30 overflow-hidden"
     >
       {/* Gradient background accent */}
-      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-red-100 to-amber-100 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
+      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-primary-600/10 to-primary-600/5 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
 
       {/* Header with name and verified badge */}
       <div className="mb-4">
         <div className="flex items-start justify-between mb-2">
           <div className="flex-1">
-            <h3 className="text-2xl font-bold text-gray-900 mb-1 group-hover:text-red-600 transition-colors">
+            <h3 className="text-2xl font-bold text-gray-900 mb-1 group-hover:text-primary-600 transition-colors">
               {fullName}
             </h3>
             {providerTypeLabel && (
-              <p className="text-sm font-semibold text-red-600 uppercase tracking-wide">
+              <p className="text-sm font-semibold text-primary-600 uppercase tracking-wide">
                 {providerTypeLabel}
               </p>
             )}
@@ -174,10 +174,8 @@ function ProvidersContent() {
       <header className="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <a href="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-red-600 to-red-700 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-md">
-              O
-            </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-red-600 to-red-700 bg-clip-text text-transparent">
+            <img src="/logo.png" alt="OpenMed" className="h-10 w-auto" />
+            <span className="text-2xl font-bold text-secondary-600">
               OpenMed
             </span>
           </a>
@@ -192,7 +190,7 @@ function ProvidersContent() {
                 </a>
                 <a
                   href="/auth/register"
-                  className="bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-2 rounded-lg hover:from-red-700 hover:to-red-800 font-medium shadow-md hover:shadow-lg transition-all transform hover:scale-105"
+                  className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-lg font-medium shadow-sm hover:shadow-md transition-all"
                 >
                   Sign Up
                 </a>
@@ -201,7 +199,7 @@ function ProvidersContent() {
             {isAuthenticated && (
               <a
                 href="/dashboard"
-                className="bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-2 rounded-lg hover:from-red-700 hover:to-red-800 font-medium shadow-md hover:shadow-lg transition-all transform hover:scale-105"
+                className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-lg font-medium shadow-sm hover:shadow-md transition-all"
               >
                 Dashboard
               </a>
@@ -226,13 +224,13 @@ function ProvidersContent() {
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Filters Sidebar */}
           <aside className="lg:w-80 flex-shrink-0">
-            <div className="bg-white p-6 rounded-2xl shadow-lg sticky top-24 border border-gray-100">
+            <div className="bg-white p-6 rounded-xl shadow-sm sticky top-24 border border-gray-100">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-bold text-gray-900">Filters</h2>
                 {(providerType || minRating || maxPrice || isVerified) && (
                   <button
                     onClick={clearFilters}
-                    className="text-sm text-red-600 hover:text-red-700 font-medium"
+                    className="text-sm text-primary-600 hover:text-primary-700 font-medium"
                   >
                     Clear all
                   </button>
@@ -249,9 +247,9 @@ function ProvidersContent() {
                     <button
                       key={type.value}
                       onClick={() => setProviderType(providerType === type.value ? '' : type.value)}
-                      className={`px-3 py-2 rounded-lg border-2 text-sm font-medium transition-all transform hover:scale-105 ${
+                      className={`px-3 py-2 rounded-lg border-2 text-sm font-medium transition-all ${
                         providerType === type.value
-                          ? 'border-red-600 bg-red-50 text-red-700'
+                          ? 'border-primary-600 bg-primary-600/10 text-primary-600'
                           : 'border-gray-200 text-gray-700 hover:border-gray-300'
                       }`}
                     >
@@ -276,7 +274,7 @@ function ProvidersContent() {
                       onClick={() => setMinRating(minRating === rating ? '' : rating)}
                       className={`w-full px-4 py-2 rounded-lg border-2 text-sm font-medium transition-all ${
                         minRating === rating
-                          ? 'border-red-600 bg-red-50 text-red-700'
+                          ? 'border-primary-600 bg-primary-600/10 text-primary-600'
                           : 'border-gray-200 text-gray-700 hover:border-gray-300'
                       }`}
                     >
@@ -299,7 +297,7 @@ function ProvidersContent() {
                   value={maxPrice}
                   onChange={(e) => setMaxPrice(e.target.value)}
                   placeholder="Any price"
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900 transition-all"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-primary-600 text-gray-900 transition-all"
                 />
               </div>
 
@@ -310,7 +308,7 @@ function ProvidersContent() {
                     type="checkbox"
                     checked={isVerified}
                     onChange={(e) => setIsVerified(e.target.checked)}
-                    className="w-5 h-5 text-red-600 border-gray-300 rounded focus:ring-red-500 mt-0.5"
+                    className="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-600 mt-0.5"
                   />
                   <div className="ml-3">
                     <span className="text-sm font-semibold text-gray-900 block">
@@ -326,7 +324,7 @@ function ProvidersContent() {
               {/* Apply Filters Button */}
               <button
                 onClick={updateFilters}
-                className="w-full bg-gradient-to-r from-red-600 to-red-700 text-white py-3 rounded-lg hover:from-red-700 hover:to-red-800 font-semibold transition-all shadow-md hover:shadow-lg transform hover:scale-105 active:scale-95"
+                className="w-full bg-primary-600 hover:bg-primary-700 text-white py-3 rounded-lg font-semibold transition-all shadow-sm hover:shadow-md"
               >
                 Apply Filters
               </button>
@@ -350,7 +348,7 @@ function ProvidersContent() {
                 {[1, 2, 3, 4].map((i) => (
                   <div
                     key={i}
-                    className="bg-white rounded-2xl shadow-md p-6 animate-pulse"
+                    className="bg-white rounded-xl shadow-sm p-6 animate-pulse"
                   >
                     <div className="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
                     <div className="h-4 bg-gray-200 rounded w-1/2 mb-3"></div>
@@ -360,7 +358,7 @@ function ProvidersContent() {
                 ))}
               </div>
             ) : providers.length === 0 ? (
-              <div className="bg-white rounded-2xl shadow-lg p-16 text-center border border-gray-100">
+              <div className="bg-white rounded-xl shadow-sm p-16 text-center border border-gray-100">
                 <div className="text-7xl mb-6">🔍</div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-3">
                   No providers found
@@ -370,7 +368,7 @@ function ProvidersContent() {
                 </p>
                 <button
                   onClick={clearFilters}
-                  className="inline-block bg-gradient-to-r from-red-600 to-red-700 text-white px-8 py-3 rounded-lg hover:from-red-700 hover:to-red-800 font-semibold transition-all shadow-md hover:shadow-lg transform hover:scale-105"
+                  className="inline-block bg-primary-600 hover:bg-primary-700 text-white px-8 py-3 rounded-lg font-semibold transition-all shadow-sm hover:shadow-md"
                 >
                   Clear all filters
                 </button>
@@ -392,7 +390,7 @@ function ProvidersContent() {
 export default function ProvidersPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gradient-to-br from-red-50 via-amber-50 to-green-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-gray-600">Loading...</div>
       </div>
     }>

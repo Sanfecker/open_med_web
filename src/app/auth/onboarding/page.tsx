@@ -148,15 +148,13 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50 via-amber-50 to-green-50 flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-12">
       <div className="max-w-2xl w-full">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 mb-4">
-            <div className="w-12 h-12 bg-red-600 rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-lg">
-              O
-            </div>
-            <span className="text-2xl font-bold text-gray-900">OpenMed</span>
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center gap-3 mb-6">
+            <img src="/logo.png" alt="OpenMed" className="h-12 w-auto" />
+            <span className="text-2xl font-bold text-secondary-600">OpenMed</span>
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Let's get you set up!</h1>
           <p className="text-gray-600">Step {step} of {totalSteps}</p>
@@ -166,62 +164,62 @@ export default function OnboardingPage() {
         <div className="mb-8">
           <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-red-500 to-red-600 rounded-full transition-all duration-500 ease-out"
+              className="h-full bg-primary-600 rounded-full transition-all duration-500 ease-out"
               style={{ width: `${progress}%` }}
             />
           </div>
         </div>
 
         {/* Form Card */}
-        <div className="bg-white rounded-2xl shadow-xl p-8">
+        <div className="bg-white rounded-lg shadow-sm p-8 border border-gray-200">
           {error && (
-            <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md animate-shake">
+            <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
               {error}
             </div>
           )}
 
           {/* Step 1: Personal Info */}
           {step === 1 && (
-            <div className="animate-slide-in">
+            <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Personal Information</h2>
 
-              <div className="space-y-4">
+              <div className="space-y-5">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
                       First Name
                     </label>
                     <input
                       type="text"
                       value={formData.firstName}
                       onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900 transition-all"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent text-gray-900 transition-all"
                       placeholder="John"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
                       Last Name
                     </label>
                     <input
                       type="text"
                       value={formData.lastName}
                       onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900 transition-all"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent text-gray-900 transition-all"
                       placeholder="Doe"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-900 mb-2">
                     Phone Number
                   </label>
                   <input
                     type="tel"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900 transition-all"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent text-gray-900 transition-all"
                     placeholder="+233 XXX XXX XXX"
                   />
                 </div>
@@ -231,12 +229,12 @@ export default function OnboardingPage() {
 
           {/* Step 2: Professional Info */}
           {step === 2 && (
-            <div className="animate-slide-in">
+            <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Professional Information</h2>
 
               <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-3">
+                  <label className="block text-sm font-medium text-gray-900 mb-3">
                     What type of provider are you?
                   </label>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -245,42 +243,42 @@ export default function OnboardingPage() {
                         key={type.value}
                         type="button"
                         onClick={() => setFormData({ ...formData, providerType: type.value })}
-                        className={`p-4 rounded-xl border-2 transition-all duration-200 transform hover:scale-105 ${
+                        className={`p-4 rounded-lg border-2 transition-all ${
                           formData.providerType === type.value
-                            ? 'border-red-600 bg-red-50 shadow-md'
-                            : 'border-gray-200 hover:border-red-300'
+                            ? 'border-primary-600 bg-primary-600/10'
+                            : 'border-gray-200 hover:border-primary-600'
                         }`}
                       >
                         <div className="text-3xl mb-2">{type.icon}</div>
                         <div className="text-sm font-semibold text-gray-900">{type.label}</div>
-                        <div className="text-xs text-gray-500">{type.description}</div>
+                        <div className="text-xs text-gray-600">{type.description}</div>
                       </button>
                     ))}
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-900 mb-2">
                     Specialization
                   </label>
                   <input
                     type="text"
                     value={formData.specialization}
                     onChange={(e) => setFormData({ ...formData, specialization: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900 transition-all"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent text-gray-900 transition-all"
                     placeholder="e.g., General Practice, Cardiology"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-900 mb-2">
                     License Number
                   </label>
                   <input
                     type="text"
                     value={formData.licenseNumber}
                     onChange={(e) => setFormData({ ...formData, licenseNumber: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900 transition-all"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent text-gray-900 transition-all"
                     placeholder="Your professional license number"
                   />
                 </div>
@@ -290,7 +288,7 @@ export default function OnboardingPage() {
 
           {/* Step 3: Experience */}
           {step === 3 && (
-            <div className="animate-slide-in">
+            <div>
               <div className="text-center mb-8">
                 <div className="text-6xl mb-4">🎓</div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-2">Your Experience</h2>
@@ -298,7 +296,7 @@ export default function OnboardingPage() {
               </div>
 
               <div className="max-w-sm mx-auto">
-                <label className="block text-sm font-medium text-gray-700 mb-2 text-center">
+                <label className="block text-sm font-medium text-gray-900 mb-2 text-center">
                   How many years of experience do you have?
                 </label>
                 <input
@@ -306,10 +304,10 @@ export default function OnboardingPage() {
                   min="0"
                   value={formData.yearsOfExperience}
                   onChange={(e) => setFormData({ ...formData, yearsOfExperience: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900 text-center text-lg transition-all"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent text-gray-900 text-center text-lg transition-all"
                   placeholder="0"
                 />
-                <p className="text-xs text-gray-500 mt-2 text-center">
+                <p className="text-xs text-gray-600 mt-2 text-center">
                   Enter 0 if you're just starting out
                 </p>
               </div>
@@ -318,7 +316,7 @@ export default function OnboardingPage() {
 
           {/* Step 4: Services & Pricing */}
           {step === 4 && (
-            <div className="animate-slide-in">
+            <div>
               <div className="mb-6">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="text-5xl">💰</div>
@@ -327,8 +325,8 @@ export default function OnboardingPage() {
                     <p className="text-gray-600">Price transparency is what sets OpenMed apart!</p>
                   </div>
                 </div>
-                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
-                  <p className="text-sm text-amber-800">
+                <div className="bg-primary-600/10 border border-primary-600/30 rounded-lg p-4">
+                  <p className="text-sm text-gray-900">
                     <strong>Why this matters:</strong> Patients can see your prices upfront, making healthcare more accessible and transparent.
                   </p>
                 </div>
@@ -336,7 +334,7 @@ export default function OnboardingPage() {
 
               <div className="space-y-4 max-h-96 overflow-y-auto pr-2">
                 {services.map((service, index) => (
-                  <div key={index} className="border-2 border-gray-200 rounded-xl p-4 bg-gray-50 hover:border-red-300 transition-all">
+                  <div key={index} className="border-2 border-gray-200 rounded-lg p-4 bg-gray-50 hover:border-primary-600 transition-all">
                     <div className="flex justify-between items-start mb-3">
                       <h3 className="font-semibold text-gray-900">Service {index + 1}</h3>
                       {services.length > 1 && (
@@ -359,7 +357,7 @@ export default function OnboardingPage() {
                           type="text"
                           value={service.name}
                           onChange={(e) => updateService(index, 'name', e.target.value)}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900 text-sm"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent text-gray-900 text-sm"
                           placeholder="e.g., General Consultation"
                         />
                       </div>
@@ -372,7 +370,7 @@ export default function OnboardingPage() {
                           type="text"
                           value={service.description}
                           onChange={(e) => updateService(index, 'description', e.target.value)}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900 text-sm"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent text-gray-900 text-sm"
                           placeholder="Brief description of the service"
                         />
                       </div>
@@ -386,7 +384,7 @@ export default function OnboardingPage() {
                             <select
                               value={service.currency}
                               onChange={(e) => updateService(index, 'currency', e.target.value)}
-                              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900 text-sm"
+                              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent text-gray-900 text-sm"
                             >
                               <option value="GHS">GHS</option>
                               <option value="USD">USD</option>
@@ -399,7 +397,7 @@ export default function OnboardingPage() {
                               step="0.01"
                               value={service.price}
                               onChange={(e) => updateService(index, 'price', e.target.value)}
-                              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900 text-sm"
+                              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent text-gray-900 text-sm"
                               placeholder="0.00"
                             />
                           </div>
@@ -416,10 +414,10 @@ export default function OnboardingPage() {
                               step="5"
                               value={service.duration}
                               onChange={(e) => updateService(index, 'duration', e.target.value)}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900 text-sm"
+                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-600 focus:border-transparent text-gray-900 text-sm"
                               placeholder="30"
                             />
-                            <span className="text-xs text-gray-500">min</span>
+                            <span className="text-xs text-gray-600">min</span>
                           </div>
                         </div>
                       </div>
@@ -431,7 +429,7 @@ export default function OnboardingPage() {
               <button
                 type="button"
                 onClick={addService}
-                className="w-full mt-4 px-4 py-3 border-2 border-dashed border-gray-300 rounded-xl text-gray-600 hover:border-red-400 hover:text-red-600 font-medium transition-all flex items-center justify-center gap-2"
+                className="w-full mt-4 px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-primary-600 hover:text-primary-600 font-medium transition-all flex items-center justify-center gap-2"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -446,7 +444,7 @@ export default function OnboardingPage() {
             {step > 1 && (
               <button
                 onClick={handleBack}
-                className="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:border-gray-400 font-semibold transition-all duration-200 transform hover:scale-105"
+                className="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-600 rounded-lg hover:border-gray-400 font-semibold transition-all"
               >
                 Back
               </button>
@@ -454,7 +452,7 @@ export default function OnboardingPage() {
             {step < totalSteps ? (
               <button
                 onClick={handleNext}
-                className="flex-1 bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 font-semibold transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-md hover:shadow-lg"
+                className="flex-1 bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 font-semibold transition-all"
               >
                 Continue
               </button>
@@ -462,7 +460,7 @@ export default function OnboardingPage() {
               <button
                 onClick={handleSubmit}
                 disabled={loading}
-                className="flex-1 bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-3 rounded-lg hover:from-red-700 hover:to-red-800 font-semibold disabled:from-gray-300 disabled:to-gray-300 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl"
+                className="flex-1 bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 font-semibold disabled:bg-gray-300 disabled:cursor-not-allowed transition-all"
               >
                 {loading ? 'Setting up...' : 'Complete Setup 🎉'}
               </button>
