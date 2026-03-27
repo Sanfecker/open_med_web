@@ -678,9 +678,9 @@ export default function ProviderDetailPage() {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Left Column - Provider Info & Services */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="space-y-6">
             {/* Clinic Image Banner */}
             {provider.clinicImage && (
               <div className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100">
@@ -842,7 +842,7 @@ export default function ProviderDetailPage() {
           </div>
 
           {/* Right Column - AI Chat (Desktop Only) */}
-          <div className="hidden lg:block lg:col-span-1">
+          <div className="hidden lg:block">
             <ChatInterface
               provider={provider}
               messages={chatMessages}
