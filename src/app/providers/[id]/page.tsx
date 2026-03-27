@@ -469,12 +469,13 @@ export default function ProviderDetailPage() {
         if (response.data.bookingData && response.data.bookingData.bookingId) {
           console.log('[Chat] Booking created:', response.data.bookingData);
           // Show a success message in the chat
+          const aiMessage = response.data.message;
           setTimeout(() => {
             setChatMessages([
               ...newMessages,
               {
                 role: 'assistant' as const,
-                content: response.data.message
+                content: aiMessage
               },
               {
                 role: 'assistant' as const,
