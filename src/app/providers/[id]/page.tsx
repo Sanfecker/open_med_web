@@ -182,14 +182,16 @@ function ChatInterface({
   input,
   onInputChange,
   onSendMessage,
-  onClose
+  onClose,
+  inline = false
 }: {
   provider: Provider;
   messages: Array<{ role: 'user' | 'assistant'; content: string }>;
   input: string;
   onInputChange: (value: string) => void;
   onSendMessage: () => void;
-  onClose: () => void;
+  onClose?: () => void;
+  inline?: boolean;
 }) {
   const chatEndRef = useRef<HTMLDivElement | null>(null);
 
@@ -209,6 +211,87 @@ function ChatInterface({
     ? `${provider.firstName} ${provider.lastName}`
     : provider.clinicName || 'Provider';
 
+  if (inline) {
+    // Inline version for desktop
+    return (
+      <div className="bg-white rounded-2xl shadow-md border border-gray-100 flex flex-col h-[calc(100vh-12rem)] sticky top-24">
+        {/* Chat Header */}
+        <div className="bg-gradient-to-r from-primary-600 to-primary-700 p-6 rounded-t-2xl flex items-center gap-4">
+          <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+            </svg>
+          </div>
+          <div>
+            <h3 className="text-white font-bold text-lg">{providerName}'s Assistant</h3>
+            <p className="text-white/80 text-sm">AI Booking Assistant</p>
+          </div>
+        </div>
+
+        {/* Chat Messages */}
+        <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50">
+          {messages.map((message, index) => (
+            <div
+              key={index}
+              className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+            >
+              <div
+                className={`max-w-[85%] rounded-2xl px-5 py-3 ${
+                  message.role === 'user'
+                    ? 'bg-primary-600 text-white'
+                    : 'bg-white text-gray-900 border border-gray-200 shadow-sm'
+                }`}
+              >
+                {message.role === 'assistant' && (
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-6 h-6 bg-primary-100 rounded-full flex items-center justify-center">
+                      <svg className="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                      </svg>
+                    </div>
+                    <span className="text-xs font-semibold text-gray-600">AI Assistant</span>
+                  </div>
+                )}
+                <div className="text-sm leading-relaxed prose prose-sm max-w-none prose-headings:mt-3 prose-headings:mb-2 prose-p:my-2 prose-ul:my-2 prose-li:my-1 prose-strong:text-gray-900 prose-strong:font-semibold prose-table:border-collapse prose-table:w-full prose-th:border prose-th:border-gray-300 prose-th:bg-gray-100 prose-th:px-3 prose-th:py-2 prose-th:text-left prose-td:border prose-td:border-gray-300 prose-td:px-3 prose-td:py-2">
+                  {message.role === 'assistant' ? (
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.content}</ReactMarkdown>
+                  ) : (
+                    <p className="whitespace-pre-wrap">{message.content}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+          <div ref={chatEndRef} />
+        </div>
+
+        {/* Chat Input */}
+        <div className="border-t border-gray-200 p-4 bg-white rounded-b-2xl">
+          <div className="flex gap-3">
+            <textarea
+              value={input}
+              onChange={(e) => onInputChange(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Ask me about services, availability, or book an appointment..."
+              rows={2}
+              className="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-600 focus:border-primary-600 text-gray-900 resize-none transition-all"
+            />
+            <button
+              onClick={onSendMessage}
+              disabled={!input.trim()}
+              className="px-6 bg-primary-600 hover:bg-primary-700 text-white rounded-xl font-semibold disabled:bg-gray-300 disabled:cursor-not-allowed transition-all shadow-sm hover:shadow-md"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Modal version for mobile
   return (
     <div className="fixed inset-0 bg-black/50 flex items-end sm:items-center justify-center z-50 p-0 sm:p-4">
       <div className="bg-white w-full sm:max-w-2xl h-[100vh] sm:h-[90vh] sm:rounded-2xl shadow-2xl flex flex-col">
@@ -492,7 +575,7 @@ export default function ProviderDetailPage() {
           ...newMessages,
           {
             role: 'assistant' as const,
-            content: 'Sorry, I encountered an error. Please try using the booking panel on the right to book your appointment.'
+            content: 'Sorry, I encountered an error. Please try again or provide more details about your booking request.'
           }
         ]);
       }
@@ -502,7 +585,7 @@ export default function ProviderDetailPage() {
         ...newMessages,
         {
           role: 'assistant' as const,
-          content: 'Sorry, I encountered an error. Please try using the booking panel on the right to book your appointment.'
+          content: 'Sorry, I encountered an error. Please try again or provide more details about your booking request.'
         }
       ]);
     }
@@ -758,143 +841,25 @@ export default function ProviderDetailPage() {
             </div>
           </div>
 
-          {/* Right Column - Booking Panel */}
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl shadow-md p-6 border border-gray-100 sticky top-24">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                Book Appointment
-              </h2>
-
-              {/* Selected Service Display */}
-              {selectedService && (
-                <div className="mb-6 bg-primary-600/10 border-2 border-primary-600 rounded-xl p-4">
-                  <div className="text-sm text-gray-600 mb-1">Selected Service</div>
-                  <div className="font-bold text-gray-900 mb-1">{selectedService.name}</div>
-                  <div className="text-xl font-bold text-primary-600">
-                    {selectedService.currency} {selectedService.price}
-                  </div>
-                </div>
-              )}
-
-              {!hasAvailability ? (
-                <div className="text-center py-12">
-                  <div className="text-6xl mb-4">📅</div>
-                  <p className="text-gray-600 text-lg font-medium mb-2">No Time Slots Available</p>
-                  <p className="text-gray-500 text-sm">
-                    This provider hasn't set up their schedule yet. Please check back later.
-                  </p>
-                </div>
-              ) : (
-                <>
-                  {/* Calendar */}
-                  <div className="mb-6">
-                    <label className="block text-sm font-bold text-gray-900 mb-3">
-                      Select a Date
-                    </label>
-                    <div className="grid grid-cols-3 gap-2 max-h-96 overflow-y-auto p-2">
-                      {calendarDays.map((date) => {
-                        const isToday = isSameDay(date, new Date());
-                        const isSelected = selectedDate ? isSameDay(date, selectedDate) : false;
-
-                        return (
-                          <CalendarDay
-                            key={date.toISOString()}
-                            date={date}
-                            isSelected={isSelected}
-                            isToday={isToday}
-                            onClick={() => {
-                              setSelectedDate(date);
-                              setSelectedTimeSlot(null);
-                            }}
-                          />
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Time Slots */}
-                  {selectedDate && (
-                    <div className="mb-6">
-                      <label className="block text-sm font-bold text-gray-900 mb-3">
-                        Available Time Slots
-                      </label>
-                      {loadingSlots ? (
-                        <div className="text-center py-8">
-                          <div className="w-10 h-10 border-4 border-primary-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
-                        </div>
-                      ) : timeSlots.filter(slot => !slot.isBooked).length === 0 ? (
-                        <div className="text-center py-8 bg-gray-50 rounded-xl">
-                          <p className="text-gray-600">No available slots for this date</p>
-                        </div>
-                      ) : (
-                        <div className="grid grid-cols-2 gap-2 max-h-64 overflow-y-auto">
-                          {timeSlots
-                            .filter((slot) => !slot.isBooked)
-                            .map((slot, idx) => (
-                              <button
-                                key={idx}
-                                onClick={() => setSelectedTimeSlot(slot)}
-                                className={`px-4 py-3 text-sm font-semibold rounded-xl border-2 transition-all ${
-                                  selectedTimeSlot?.startTime === slot.startTime
-                                    ? 'bg-primary-600 text-white border-primary-600 shadow-md'
-                                    : 'bg-white text-gray-700 border-gray-200 hover:border-primary-600/40'
-                                }`}
-                              >
-                                {slot.startTime}
-                              </button>
-                            ))}
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  {/* Notes */}
-                  <div className="mb-6">
-                    <label className="block text-sm font-bold text-gray-900 mb-2">
-                      Additional Notes (Optional)
-                    </label>
-                    <textarea
-                      value={bookingNotes}
-                      onChange={(e) => setBookingNotes(e.target.value)}
-                      placeholder="Any specific concerns or requests..."
-                      rows={3}
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-600 focus:border-primary-600 text-gray-900 transition-all"
-                    />
-                  </div>
-
-                  {/* Book Button */}
-                  <button
-                    onClick={handleBooking}
-                    disabled={!selectedService || !selectedDate || !selectedTimeSlot}
-                    className="w-full bg-primary-600 hover:bg-primary-700 text-white py-4 rounded-xl font-bold text-lg disabled:bg-gray-300 disabled:cursor-not-allowed transition-all shadow-md hover:shadow-lg"
-                  >
-                    {!selectedService
-                      ? 'Select a Service'
-                      : !selectedDate
-                      ? 'Select a Date'
-                      : !selectedTimeSlot
-                      ? 'Select a Time'
-                      : 'Confirm Booking'}
-                  </button>
-
-                  <p className="text-xs text-gray-500 mt-4 text-center">
-                    You'll receive a confirmation after booking
-                  </p>
-                </>
-              )}
-            </div>
+          {/* Right Column - AI Chat (Desktop Only) */}
+          <div className="hidden lg:block lg:col-span-1">
+            <ChatInterface
+              provider={provider}
+              messages={chatMessages}
+              input={chatInput}
+              onInputChange={setChatInput}
+              onSendMessage={handleSendChatMessage}
+              inline={true}
+            />
           </div>
         </div>
       </div>
 
-      {/* Floating Chat Button */}
+      {/* Floating Chat Button (Mobile Only) */}
       {!showChat && (
         <button
           onClick={() => setShowChat(true)}
-          className="fixed bottom-6 right-6 w-16 h-16 bg-gradient-to-br from-primary-600 to-primary-700 text-white rounded-full shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 flex items-center justify-center z-40 group"
+          className="lg:hidden fixed bottom-6 right-6 w-16 h-16 bg-gradient-to-br from-primary-600 to-primary-700 text-white rounded-full shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 flex items-center justify-center z-40 group"
           aria-label="Open chat"
         >
           <svg className="w-7 h-7 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -902,6 +867,20 @@ export default function ProviderDetailPage() {
           </svg>
           <div className="absolute -top-1 -right-1 w-5 h-5 bg-green-500 border-2 border-white rounded-full animate-pulse"></div>
         </button>
+      )}
+
+      {/* Mobile Chat Modal */}
+      {showChat && (
+        <div className="lg:hidden">
+          <ChatInterface
+            provider={provider}
+            messages={chatMessages}
+            input={chatInput}
+            onInputChange={setChatInput}
+            onSendMessage={handleSendChatMessage}
+            onClose={() => setShowChat(false)}
+          />
+        </div>
       )}
     </div>
   );
