@@ -482,7 +482,7 @@ export default function ProviderDetailPage() {
 
       setChatMessages([{
         role: 'assistant',
-        content: `Hello! I'm ${providerName}'s AI assistant. I can help you with:\n\n• **View Services** - See what services are available\n• **Check Availability** - Find available appointment times\n• **Book Appointment** - Schedule your visit\n• **Ask Questions** - Learn more about the clinic\n\nHow can I help you today?`
+        content: `Hello! I'm ${providerName}'s AI assistant. I can help you with:\n\n• **View Services** - See what services are available\n\n• **Check Availability** - Find available appointment times\n\n• **Book Appointment** - Schedule your visit\n\n• **Ask Questions** - Learn more about the clinic\n\nHow can I help you today?`
       }]);
     }
   }, [provider]);
