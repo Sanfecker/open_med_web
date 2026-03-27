@@ -195,6 +195,20 @@ function ChatInterface({
 }) {
   const chatEndRef = useRef<HTMLDivElement | null>(null);
 
+  // Quick suggestion buttons
+  const suggestions = [
+    "What services do you offer?",
+    "Show me available times this week",
+    "I'd like to book an appointment",
+    "What are your prices?"
+  ];
+
+  const handleSuggestionClick = (suggestion: string) => {
+    onInputChange(suggestion);
+    // Small delay to allow the input to be set before sending
+    setTimeout(() => onSendMessage(), 100);
+  };
+
   // Scroll to bottom when messages change
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -262,6 +276,25 @@ function ChatInterface({
               </div>
             </div>
           ))}
+
+          {/* Show suggestions only on the initial welcome message */}
+          {messages.length === 1 && (
+            <div className="px-4 space-y-3">
+              <p className="text-sm text-gray-500 font-medium">Quick suggestions:</p>
+              <div className="flex flex-wrap gap-2">
+                {suggestions.map((suggestion, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => handleSuggestionClick(suggestion)}
+                    className="px-4 py-2 bg-white border-2 border-primary-600/30 text-primary-700 rounded-full text-sm font-medium hover:bg-primary-50 hover:border-primary-600 transition-all shadow-sm hover:shadow-md"
+                  >
+                    {suggestion}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           <div ref={chatEndRef} />
         </div>
 
@@ -352,6 +385,25 @@ function ChatInterface({
               </div>
             </div>
           ))}
+
+          {/* Show suggestions only on the initial welcome message */}
+          {messages.length === 1 && (
+            <div className="px-4 space-y-3">
+              <p className="text-sm text-gray-500 font-medium">Quick suggestions:</p>
+              <div className="flex flex-wrap gap-2">
+                {suggestions.map((suggestion, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => handleSuggestionClick(suggestion)}
+                    className="px-4 py-2 bg-white border-2 border-primary-600/30 text-primary-700 rounded-full text-sm font-medium hover:bg-primary-50 hover:border-primary-600 transition-all shadow-sm hover:shadow-md"
+                  >
+                    {suggestion}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           <div ref={chatEndRef} />
         </div>
 
@@ -421,19 +473,19 @@ export default function ProviderDetailPage() {
     }
   }, [selectedDate]);
 
-  // Initialize chat with greeting message when opened
+  // Initialize chat with greeting message on mount
   useEffect(() => {
-    if (showChat && chatMessages.length === 0 && provider) {
+    if (chatMessages.length === 0 && provider) {
       const providerName = provider.firstName && provider.lastName
         ? `${provider.firstName} ${provider.lastName}`
-        : provider.clinicName || 'our';
+        : provider.clinicName || 'Provider';
 
       setChatMessages([{
         role: 'assistant',
-        content: `Good day! I am ${providerName}'s assistant. I can show you the available time slots and help you secure a booking. How can I help you today?`
+        content: `Hello! I'm ${providerName}'s AI assistant. I can help you with:\n\n• **View Services** - See what services are available\n• **Check Availability** - Find available appointment times\n• **Book Appointment** - Schedule your visit\n• **Ask Questions** - Learn more about the clinic\n\nHow can I help you today?`
       }]);
     }
-  }, [showChat, provider]);
+  }, [provider]);
 
   const fetchProviderData = async () => {
     setLoading(true);
