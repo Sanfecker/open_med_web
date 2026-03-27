@@ -268,7 +268,18 @@ function ChatInterface({
                 )}
                 <div className="text-sm leading-relaxed prose prose-sm max-w-none prose-headings:mt-3 prose-headings:mb-2 prose-p:my-2 prose-ul:my-2 prose-li:my-1 prose-strong:text-gray-900 prose-strong:font-semibold prose-table:border-collapse prose-table:w-full prose-th:border prose-th:border-gray-300 prose-th:bg-gray-100 prose-th:px-3 prose-th:py-2 prose-th:text-left prose-td:border prose-td:border-gray-300 prose-td:px-3 prose-td:py-2">
                   {message.role === 'assistant' ? (
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.content}</ReactMarkdown>
+                    message.isLoading ? (
+                      <div className="flex items-center gap-2">
+                        <p className="text-gray-600">{message.content}</p>
+                        <div className="flex gap-1">
+                          <span className="w-2 h-2 bg-primary-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                          <span className="w-2 h-2 bg-primary-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                          <span className="w-2 h-2 bg-primary-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                        </div>
+                      </div>
+                    ) : (
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.content}</ReactMarkdown>
+                    )
                   ) : (
                     <p className="whitespace-pre-wrap">{message.content}</p>
                   )}
@@ -377,7 +388,18 @@ function ChatInterface({
                 )}
                 <div className="text-sm leading-relaxed prose prose-sm max-w-none prose-headings:mt-3 prose-headings:mb-2 prose-p:my-2 prose-ul:my-2 prose-li:my-1 prose-strong:text-gray-900 prose-strong:font-semibold prose-table:border-collapse prose-table:w-full prose-th:border prose-th:border-gray-300 prose-th:bg-gray-100 prose-th:px-3 prose-th:py-2 prose-th:text-left prose-td:border prose-td:border-gray-300 prose-td:px-3 prose-td:py-2">
                   {message.role === 'assistant' ? (
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.content}</ReactMarkdown>
+                    message.isLoading ? (
+                      <div className="flex items-center gap-2">
+                        <p className="text-gray-600">{message.content}</p>
+                        <div className="flex gap-1">
+                          <span className="w-2 h-2 bg-primary-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                          <span className="w-2 h-2 bg-primary-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                          <span className="w-2 h-2 bg-primary-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                        </div>
+                      </div>
+                    ) : (
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.content}</ReactMarkdown>
+                    )
                   ) : (
                     <p className="whitespace-pre-wrap">{message.content}</p>
                   )}
@@ -457,8 +479,9 @@ export default function ProviderDetailPage() {
   const [bookingData, setBookingData] = useState<any>(null);
   const [hasAvailability, setHasAvailability] = useState(true);
   const [showChat, setShowChat] = useState(false);
-  const [chatMessages, setChatMessages] = useState<Array<{ role: 'user' | 'assistant'; content: string }>>([]);
+  const [chatMessages, setChatMessages] = useState<Array<{ role: 'user' | 'assistant'; content: string; isLoading?: boolean }>>([]);
   const [chatInput, setChatInput] = useState('');
+  const [isSendingMessage, setIsSendingMessage] = useState(false);
 
   // Generate next 30 days for calendar
   const calendarDays = Array.from({ length: 30 }, (_, i) => addDays(new Date(), i));
@@ -566,16 +589,29 @@ export default function ProviderDetailPage() {
   };
 
   const handleSendChatMessage = async () => {
-    if (!chatInput.trim() || !provider) return;
+    if (!chatInput.trim() || !provider || isSendingMessage) return;
 
-    // Add user message
+    const loadingMessages = [
+      'Thinking...',
+      'Processing your request...',
+      'Let me check that for you...',
+      'One moment please...',
+      'Looking into that...'
+    ];
+    const randomLoadingText = loadingMessages[Math.floor(Math.random() * loadingMessages.length)];
+
+    // Add user message and loading message
     const newMessages = [
       ...chatMessages,
       { role: 'user' as const, content: chatInput }
     ];
-    setChatMessages(newMessages);
+    setChatMessages([
+      ...newMessages,
+      { role: 'assistant' as const, content: randomLoadingText, isLoading: true }
+    ]);
     const currentInput = chatInput;
     setChatInput('');
+    setIsSendingMessage(true);
 
     try {
       // Call the booking chat API
@@ -590,7 +626,7 @@ export default function ProviderDetailPage() {
       console.log('[Chat] Response.data:', response.data);
 
       if (response.success && response.data) {
-        // Add AI response
+        // Remove loading message and add AI response
         console.log('[Chat] Adding AI message:', response.data.message);
         setChatMessages([
           ...newMessages,
@@ -620,14 +656,24 @@ export default function ProviderDetailPage() {
           }, 100);
         }
       } else {
-        // Error fallback
+        // Error fallback with user-friendly message
         console.error('[Chat] Response not successful or no data');
         console.error('[Chat] Response error:', response.error);
+
+        let errorMessage = 'Sorry, I encountered an error. Please try again or provide more details about your booking request.';
+
+        // Check for specific error codes
+        if (response.error?.code === 'SERVICE_UNAVAILABLE' || response.error?.message?.includes('temporarily unavailable')) {
+          errorMessage = '⚠️ **Temporarily Unavailable**\n\nSorry, our booking assistant is temporarily unavailable due to high demand. Please try again in a few moments.';
+        } else if (response.error?.code === 'NETWORK_ERROR') {
+          errorMessage = '⚠️ **Connection Issue**\n\nUnable to connect to our servers. Please check your internet connection and try again.';
+        }
+
         setChatMessages([
           ...newMessages,
           {
             role: 'assistant' as const,
-            content: 'Sorry, I encountered an error. Please try again or provide more details about your booking request.'
+            content: errorMessage
           }
         ]);
       }
@@ -637,9 +683,11 @@ export default function ProviderDetailPage() {
         ...newMessages,
         {
           role: 'assistant' as const,
-          content: 'Sorry, I encountered an error. Please try again or provide more details about your booking request.'
+          content: '⚠️ **Temporarily Unavailable**\n\nSorry, our booking assistant is temporarily unavailable. Please try again in a few moments.'
         }
       ]);
+    } finally {
+      setIsSendingMessage(false);
     }
   };
 
