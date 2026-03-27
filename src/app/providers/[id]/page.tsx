@@ -8,6 +8,13 @@ import { format, addDays, isSameDay, startOfDay, getDay } from 'date-fns';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
+// Chat Message Type
+interface ChatMessage {
+  role: 'user' | 'assistant';
+  content: string;
+  isLoading?: boolean;
+}
+
 // Calendar Day Component
 function CalendarDay({
   date,
@@ -186,7 +193,7 @@ function ChatInterface({
   inline = false
 }: {
   provider: Provider;
-  messages: Array<{ role: 'user' | 'assistant'; content: string }>;
+  messages: ChatMessage[];
   input: string;
   onInputChange: (value: string) => void;
   onSendMessage: () => void;
@@ -479,7 +486,7 @@ export default function ProviderDetailPage() {
   const [bookingData, setBookingData] = useState<any>(null);
   const [hasAvailability, setHasAvailability] = useState(true);
   const [showChat, setShowChat] = useState(false);
-  const [chatMessages, setChatMessages] = useState<Array<{ role: 'user' | 'assistant'; content: string; isLoading?: boolean }>>([]);
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [chatInput, setChatInput] = useState('');
   const [isSendingMessage, setIsSendingMessage] = useState(false);
 
