@@ -11,80 +11,96 @@ function ProviderCard({ provider }: { provider: Provider }) {
     ? `${provider.firstName} ${provider.lastName}`
     : 'Healthcare Provider';
 
-  const providerTypeLabel = provider.providerType
-    ? provider.providerType.charAt(0).toUpperCase() + provider.providerType.slice(1)
-    : '';
+  // Get specialization-specific gradient
+  const specializationGradients: Record<string, string> = {
+    'Dentistry': 'from-blue-500 to-cyan-500',
+    'Ophthalmology': 'from-purple-500 to-pink-500',
+    'Optometry': 'from-cyan-500 to-teal-500',
+    'Plastic Surgery': 'from-pink-500 to-rose-500',
+    'Dermatology': 'from-amber-500 to-orange-500',
+    'General Practice': 'from-green-500 to-emerald-500',
+  };
+
+  const gradient = provider.specialization
+    ? specializationGradients[provider.specialization] || 'from-gray-500 to-gray-600'
+    : 'from-gray-500 to-gray-600';
 
   return (
     <a
       href={`/providers/${provider.id}`}
-      className="group relative bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-500 p-8 block border-2 border-gray-100 hover:border-primary-600/30 overflow-hidden"
+      className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-gray-100 hover:border-transparent transform hover:-translate-y-1"
     >
-      {/* Gradient background accent */}
-      <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-primary-600/10 to-primary-600/5 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10" />
-
-      {/* Header with name and verified badge */}
-      <div className="mb-4">
-        <div className="flex items-start justify-between mb-2">
-          <div className="flex-1">
-            <h3 className="text-2xl font-bold text-gray-900 mb-1 group-hover:text-primary-600 transition-colors">
-              {fullName}
-            </h3>
-            {providerTypeLabel && (
-              <p className="text-sm font-semibold text-primary-600 uppercase tracking-wide">
-                {providerTypeLabel}
-              </p>
-            )}
-          </div>
-          {provider.isVerified && (
-            <div className="flex-shrink-0">
-              <div className="bg-blue-500 text-white p-2 rounded-full shadow-md">
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-              </div>
+      {/* Provider Image */}
+      <div className="relative h-48 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+        {provider.clinicImage ? (
+          <img
+            src={provider.clinicImage}
+            alt={provider.clinicName || fullName}
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+          />
+        ) : (
+          <div className={`w-full h-full bg-gradient-to-br ${gradient} flex items-center justify-center`}>
+            <div className="text-6xl text-white opacity-50">
+              {provider.specialization?.charAt(0) || '🏥'}
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
-        {provider.specialization && (
-          <p className="text-sm text-gray-600 font-medium mt-2">
-            {provider.specialization}
-          </p>
+        {/* Verified Badge */}
+        {provider.isVerified && (
+          <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5">
+            <svg className="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+            </svg>
+            <span className="text-xs font-bold text-gray-900">Verified</span>
+          </div>
         )}
       </div>
 
-      {/* Rating and Experience */}
-      <div className="flex items-center gap-3 mb-4">
-        <div className="flex items-center bg-gradient-to-r from-amber-50 to-yellow-50 px-4 py-2 rounded-xl border border-amber-200">
-          <svg className="w-5 h-5 text-amber-500 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-          </svg>
-          <span className="font-bold text-gray-900 text-lg">
-            {provider.rating ? provider.rating.toFixed(1) : '0.0'}
-          </span>
-          <span className="text-sm text-gray-500 ml-1">
-            ({provider.totalReviews || 0})
-          </span>
-        </div>
+      {/* Card Content */}
+      <div className="p-6">
+        {/* Provider Name */}
+        <h3 className="text-2xl font-black text-gray-900 mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-primary-600 group-hover:to-secondary-600 transition-all">
+          {fullName}
+        </h3>
 
-        {provider.yearsOfExperience !== undefined && (
-          <div className="flex items-center bg-gray-50 px-4 py-2 rounded-xl border border-gray-200">
-            <svg className="w-4 h-4 text-gray-600 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-            </svg>
-            <span className="text-sm font-semibold text-gray-700">
-              {provider.yearsOfExperience} {provider.yearsOfExperience === 1 ? 'year' : 'years'}
+        {/* Specialization Badge */}
+        {provider.specialization && (
+          <div className={`inline-block mb-4`}>
+            <span className={`bg-gradient-to-r ${gradient} text-white px-4 py-1.5 rounded-full text-sm font-bold shadow-md`}>
+              {provider.specialization}
             </span>
           </div>
         )}
-      </div>
 
-      {provider.bio && (
-        <p className="text-sm text-gray-600 line-clamp-2 leading-relaxed">
-          {provider.bio}
-        </p>
-      )}
+        {/* Clinic Details */}
+        {provider.clinicName && (
+          <div className="flex items-center gap-2 mb-3">
+            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+            </svg>
+            <span className="text-gray-700 font-semibold">{provider.clinicName}</span>
+          </div>
+        )}
+
+        {provider.location && (
+          <div className="flex items-center gap-2 mb-4">
+            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <span className="text-gray-600">{provider.location}</span>
+          </div>
+        )}
+
+        {/* View Details Button */}
+        <div className="mt-6 flex items-center justify-between">
+          <span className="text-primary-600 font-bold group-hover:underline">View Details</span>
+          <svg className="w-5 h-5 text-primary-600 transform group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          </svg>
+        </div>
+      </div>
     </a>
   );
 }
@@ -98,10 +114,9 @@ function ProvidersContent() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   // Filter states
-  const [providerType, setProviderType] = useState(
-    searchParams.get('providerType') || ''
+  const [specialization, setSpecialization] = useState(
+    searchParams.get('specialization') || ''
   );
-  const [minRating, setMinRating] = useState(searchParams.get('minRating') || '');
   const [maxPrice, setMaxPrice] = useState(searchParams.get('maxPrice') || '');
   const [isVerified, setIsVerified] = useState(
     searchParams.get('isVerified') === 'true'
@@ -122,8 +137,7 @@ function ProvidersContent() {
     setError(null);
 
     const filters: any = {};
-    if (providerType) filters.providerType = providerType;
-    if (minRating) filters.minRating = parseFloat(minRating);
+    if (specialization) filters.specialization = specialization;
     if (maxPrice) filters.maxPrice = parseFloat(maxPrice);
     if (isVerified) filters.isVerified = true;
 
@@ -139,8 +153,7 @@ function ProvidersContent() {
   };
 
   const clearFilters = () => {
-    setProviderType('');
-    setMinRating('');
+    setSpecialization('');
     setMaxPrice('');
     setIsVerified(false);
     router.push('/providers');
@@ -148,8 +161,7 @@ function ProvidersContent() {
 
   const updateFilters = () => {
     const params = new URLSearchParams();
-    if (providerType) params.append('providerType', providerType);
-    if (minRating) params.append('minRating', minRating);
+    if (specialization) params.append('specialization', specialization);
     if (maxPrice) params.append('maxPrice', maxPrice);
     if (isVerified) params.append('isVerified', 'true');
 
@@ -157,66 +169,48 @@ function ProvidersContent() {
     router.push(queryString ? `/providers?${queryString}` : '/providers');
   };
 
-  const providerTypes = [
-    { value: 'doctor', label: 'Doctors', icon: '🩺' },
-    { value: 'dentist', label: 'Dentists', icon: '🦷' },
-    { value: 'optometrist', label: 'Optometrists', icon: '👓' },
-    { value: 'physiotherapist', label: 'Physiotherapists', icon: '💪' },
-    { value: 'psychologist', label: 'Psychologists', icon: '🧠' },
-    { value: 'dermatologist', label: 'Dermatologists', icon: '✨' },
-    { value: 'pediatrician', label: 'Pediatricians', icon: '👶' },
-    { value: 'other', label: 'Other', icon: '➕' },
+  // Specializations matching mobile app
+  const specializations = [
+    { value: 'Dentistry', label: 'Dentistry', icon: '🦷', gradient: 'from-blue-500 to-cyan-500' },
+    { value: 'Ophthalmology', label: 'Ophthalmology', icon: '👁️', gradient: 'from-purple-500 to-pink-500' },
+    { value: 'Optometry', label: 'Optometry', icon: '👓', gradient: 'from-cyan-500 to-teal-500' },
+    { value: 'Plastic Surgery', label: 'Plastic Surgery', icon: '✨', gradient: 'from-pink-500 to-rose-500' },
+    { value: 'Dermatology', label: 'Dermatology', icon: '🌟', gradient: 'from-amber-500 to-orange-500' },
+    { value: 'General Practice', label: 'General Practice', icon: '🩺', gradient: 'from-green-500 to-emerald-500' },
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-white via-[#EDF6F9]/20 to-white">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <a href="/" className="flex items-center gap-3">
-            <img src="/logo.png" alt="OpenMed" className="h-10 w-auto" />
-            <span className="text-2xl font-bold text-secondary-600">
+      <header className="border-b border-gray-100 bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex justify-between items-center">
+          <a href="/" className="flex items-center gap-4 group">
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-primary-600 to-secondary-600 rounded-xl blur opacity-25 group-hover:opacity-40 transition-opacity"></div>
+              <img src="/logo.png" alt="OpenMed" className="h-14 w-auto relative" />
+            </div>
+            <span className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-secondary-600">
               OpenMed
             </span>
           </a>
-          <nav className="flex gap-3">
-            {!isAuthenticated && (
-              <>
-                <a
-                  href="/auth/login"
-                  className="text-gray-700 hover:text-gray-900 px-4 py-2 rounded-lg hover:bg-gray-100 transition-all font-medium"
-                >
-                  Sign In
-                </a>
-                <a
-                  href="/auth/register"
-                  className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-lg font-medium shadow-sm hover:shadow-md transition-all"
-                >
-                  Sign Up
-                </a>
-              </>
-            )}
-            {isAuthenticated && (
-              <a
-                href="/dashboard"
-                className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-lg font-medium shadow-sm hover:shadow-md transition-all"
-              >
-                Dashboard
-              </a>
-            )}
+          <nav className="flex gap-2">
+            <a
+              href="/providers"
+              className="text-primary-600 hover:text-primary-700 px-6 py-2.5 rounded-lg hover:bg-primary-50 transition-all font-semibold text-lg"
+            >
+              See Providers
+            </a>
           </nav>
         </div>
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Page Title */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
-            {providerType
-              ? `${providerTypes.find(t => t.value === providerType)?.label || 'Providers'}`
-              : 'All Healthcare Providers'}
+        <div className="mb-12 text-center">
+          <h1 className="text-5xl font-black text-gray-900 mb-4">
+            {specialization || 'All Healthcare Providers'}
           </h1>
-          <p className="text-gray-600 text-lg">
+          <p className="text-gray-600 text-xl">
             {loading ? 'Loading providers...' : `${providers.length} provider${providers.length !== 1 ? 's' : ''} available`}
           </p>
         </div>
@@ -224,63 +218,38 @@ function ProvidersContent() {
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Filters Sidebar */}
           <aside className="lg:w-80 flex-shrink-0">
-            <div className="bg-white p-6 rounded-xl shadow-sm sticky top-24 border border-gray-100">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-gray-900">Filters</h2>
-                {(providerType || minRating || maxPrice || isVerified) && (
+            <div className="bg-white p-6 rounded-2xl shadow-lg sticky top-24 border-2 border-gray-100">
+              <div className="flex items-center justify-between mb-8">
+                <h2 className="text-2xl font-black text-gray-900">Filters</h2>
+                {(specialization || maxPrice || isVerified) && (
                   <button
                     onClick={clearFilters}
-                    className="text-sm text-primary-600 hover:text-primary-700 font-medium"
+                    className="text-sm text-primary-600 hover:text-primary-700 font-bold hover:underline"
                   >
                     Clear all
                   </button>
                 )}
               </div>
 
-              {/* Provider Type - Chip Buttons */}
-              <div className="mb-6">
-                <label className="block text-sm font-semibold text-gray-700 mb-3">
-                  Provider Type
-                </label>
-                <div className="grid grid-cols-2 gap-2">
-                  {providerTypes.map((type) => (
-                    <button
-                      key={type.value}
-                      onClick={() => setProviderType(providerType === type.value ? '' : type.value)}
-                      className={`px-3 py-2 rounded-lg border-2 text-sm font-medium transition-all ${
-                        providerType === type.value
-                          ? 'border-primary-600 bg-primary-600/10 text-primary-600'
-                          : 'border-gray-200 text-gray-700 hover:border-gray-300'
-                      }`}
-                    >
-                      <div className="flex flex-col items-center gap-1">
-                        <span className="text-xl">{type.icon}</span>
-                        <span className="text-xs">{type.label}</span>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Minimum Rating */}
-              <div className="mb-6">
-                <label className="block text-sm font-semibold text-gray-700 mb-3">
-                  Minimum Rating
+              {/* Specialization - Colorful Buttons */}
+              <div className="mb-8">
+                <label className="block text-sm font-bold text-gray-900 mb-4">
+                  Specialization
                 </label>
                 <div className="space-y-2">
-                  {['4.5', '4.0', '3.5', '3.0'].map((rating) => (
+                  {specializations.map((spec) => (
                     <button
-                      key={rating}
-                      onClick={() => setMinRating(minRating === rating ? '' : rating)}
-                      className={`w-full px-4 py-2 rounded-lg border-2 text-sm font-medium transition-all ${
-                        minRating === rating
-                          ? 'border-primary-600 bg-primary-600/10 text-primary-600'
-                          : 'border-gray-200 text-gray-700 hover:border-gray-300'
+                      key={spec.value}
+                      onClick={() => setSpecialization(specialization === spec.value ? '' : spec.value)}
+                      className={`w-full px-4 py-3 rounded-xl border-2 text-sm font-semibold transition-all transform hover:scale-105 ${
+                        specialization === spec.value
+                          ? `border-transparent bg-gradient-to-r ${spec.gradient} text-white shadow-lg`
+                          : 'border-gray-200 text-gray-700 hover:border-gray-300 bg-white'
                       }`}
                     >
-                      <div className="flex items-center justify-center gap-1">
-                        <span className="text-yellow-500">⭐</span>
-                        <span>{rating}+ Stars</span>
+                      <div className="flex items-center gap-3">
+                        <span className="text-2xl">{spec.icon}</span>
+                        <span>{spec.label}</span>
                       </div>
                     </button>
                   ))}
@@ -374,7 +343,7 @@ function ProvidersContent() {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {providers.map((provider) => (
                   <ProviderCard key={provider.id} provider={provider} />
                 ))}

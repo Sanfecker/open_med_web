@@ -14,178 +14,182 @@ export default function Home() {
     setIsAuthenticated(!!token);
   }, []);
 
+  // Specializations matching mobile app
   const serviceTypes = [
     {
-      name: 'General Practitioners',
-      value: 'doctor',
-      icon: '🩺',
-      description: 'Primary care physicians for general health concerns',
-      color: 'from-blue-50 to-blue-100 border-blue-200 hover:border-blue-400'
-    },
-    {
-      name: 'Dentists',
-      value: 'dentist',
+      name: 'Dentistry',
+      value: 'Dentistry',
       icon: '🦷',
-      description: 'Oral health care and dental treatments',
-      color: 'from-cyan-50 to-cyan-100 border-cyan-200 hover:border-cyan-400'
+      description: 'Dental and oral health care',
+      gradient: 'from-blue-500 to-cyan-500',
+      bgGradient: 'from-blue-50 to-cyan-50'
     },
     {
-      name: 'Optometrists',
-      value: 'optometrist',
+      name: 'Ophthalmology',
+      value: 'Ophthalmology',
+      icon: '👁️',
+      description: 'Eye and vision care',
+      gradient: 'from-purple-500 to-pink-500',
+      bgGradient: 'from-purple-50 to-pink-50'
+    },
+    {
+      name: 'Optometry',
+      value: 'Optometry',
       icon: '👓',
-      description: 'Eye care specialists and vision correction',
-      color: 'from-purple-50 to-purple-100 border-purple-200 hover:border-purple-400'
+      description: 'Vision care and optical services',
+      gradient: 'from-cyan-500 to-teal-500',
+      bgGradient: 'from-cyan-50 to-teal-50'
     },
     {
-      name: 'Physiotherapists',
-      value: 'physiotherapist',
-      icon: '💪',
-      description: 'Physical therapy and rehabilitation services',
-      color: 'from-green-50 to-green-100 border-green-200 hover:border-green-400'
-    },
-    {
-      name: 'Psychologists',
-      value: 'psychologist',
-      icon: '🧠',
-      description: 'Mental health support and counseling',
-      color: 'from-pink-50 to-pink-100 border-pink-200 hover:border-pink-400'
-    },
-    {
-      name: 'Dermatologists',
-      value: 'dermatologist',
+      name: 'Plastic Surgery',
+      value: 'Plastic Surgery',
       icon: '✨',
-      description: 'Skin care specialists and treatments',
-      color: 'from-amber-50 to-amber-100 border-amber-200 hover:border-amber-400'
+      description: 'Reconstructive and cosmetic surgery',
+      gradient: 'from-pink-500 to-rose-500',
+      bgGradient: 'from-pink-50 to-rose-50'
     },
     {
-      name: 'Pediatricians',
-      value: 'pediatrician',
-      icon: '👶',
-      description: 'Specialized care for infants and children',
-      color: 'from-rose-50 to-rose-100 border-rose-200 hover:border-rose-400'
+      name: 'Dermatology',
+      value: 'Dermatology',
+      icon: '🌟',
+      description: 'Skin, hair, and nail care',
+      gradient: 'from-amber-500 to-orange-500',
+      bgGradient: 'from-amber-50 to-orange-50'
     },
     {
-      name: 'Other Specialists',
-      value: 'other',
-      icon: '➕',
-      description: 'Additional medical professionals and services',
-      color: 'from-gray-50 to-gray-100 border-gray-200 hover:border-gray-400'
+      name: 'General Practice',
+      value: 'General Practice',
+      icon: '🩺',
+      description: 'Primary and family healthcare',
+      gradient: 'from-green-500 to-emerald-500',
+      bgGradient: 'from-green-50 to-emerald-50'
     },
   ];
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-white via-[#EDF6F9]/30 to-white">
       {/* Header */}
-      <header className="border-b border-gray-200 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex justify-between items-center">
-          <div className="flex items-center gap-3">
-            <img src="/logo.png" alt="OpenMed" className="h-10 w-auto" />
-            <span className="text-2xl font-bold text-secondary-600">
+      <header className="border-b border-gray-100 bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex justify-between items-center">
+          <a href="/" className="flex items-center gap-4 group">
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-primary-600 to-secondary-600 rounded-xl blur opacity-25 group-hover:opacity-40 transition-opacity"></div>
+              <img src="/logo.png" alt="OpenMed" className="h-14 w-auto relative" />
+            </div>
+            <span className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-secondary-600">
               OpenMed
             </span>
-          </div>
-          <nav className="flex gap-4">
-            {!isAuthenticated && (
-              <>
-                <a
-                  href="/auth/login"
-                  className="text-gray-600 hover:text-gray-900 px-4 py-2 rounded-lg hover:bg-gray-50 transition-all font-medium"
-                >
-                  Sign In
-                </a>
-                <a
-                  href="/auth/register"
-                  className="bg-primary-600 text-white px-6 py-2 rounded-lg hover:bg-primary-700 font-medium transition-all"
-                >
-                  Sign Up
-                </a>
-              </>
-            )}
-            {isAuthenticated && (
-              <a
-                href="/dashboard"
-                className="bg-primary-600 text-white px-6 py-2 rounded-lg hover:bg-primary-700 font-medium transition-all"
-              >
-                Dashboard
-              </a>
-            )}
+          </a>
+          <nav className="flex gap-2">
+            <a
+              href="/providers"
+              className="text-primary-600 hover:text-primary-700 px-6 py-2.5 rounded-lg hover:bg-primary-50 transition-all font-semibold text-lg"
+            >
+              See Providers
+            </a>
           </nav>
         </div>
       </header>
 
       {/* Hero Section */}
       <main className="flex-1">
-        <div className="bg-gray-50 py-20 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-7xl mx-auto">
+        <div className="relative overflow-hidden">
+          {/* Background decoration */}
+          <div className="absolute inset-0 bg-gradient-to-br from-primary-50 via-white to-secondary-50 opacity-60"></div>
+          <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-primary-200/20 to-transparent rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-secondary-200/20 to-transparent rounded-full blur-3xl"></div>
+
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
             {/* Hero Text */}
-            <div className="text-center mb-20">
-              <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-8 leading-tight">
+            <div className="text-center mb-24">
+              <div className="inline-block mb-6">
+                <span className="bg-gradient-to-r from-primary-600 to-secondary-600 text-white px-6 py-2 rounded-full text-sm font-bold uppercase tracking-wide shadow-lg">
+                  Healthcare Made Simple
+                </span>
+              </div>
+              <h1 className="text-5xl md:text-7xl font-black text-gray-900 mb-8 leading-tight">
                 Find Quality Healthcare
                 <br />
-                <span className="text-primary-600">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 via-primary-700 to-secondary-600">
                   At The Right Price
                 </span>
               </h1>
-              <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
-                Compare prices and book appointments with verified medical providers across Ghana
+              <p className="text-xl md:text-2xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed">
+                Compare prices and book appointments with verified medical providers across Ghana.
+                Your health journey starts here.
               </p>
-            </div>
 
-            {/* View All Providers - Prominent CTA */}
-            <div className="max-w-2xl mx-auto mb-20">
-              <button
-                onClick={() => router.push('/providers')}
-                className="w-full bg-primary-600 text-white py-6 rounded-lg hover:bg-primary-700 font-semibold text-xl shadow-sm transition-all flex items-center justify-center gap-3 group"
-              >
-                <span>View All Providers</span>
-                <svg
-                  className="w-6 h-6 transform group-hover:translate-x-1 transition-transform"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
-              </button>
+              {/* Quick stats */}
+              <div className="flex flex-wrap justify-center gap-8 md:gap-12 mt-12">
+                <div className="text-center">
+                  <div className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-secondary-600">
+                    100+
+                  </div>
+                  <div className="text-gray-600 font-semibold mt-2">Verified Providers</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-secondary-600">
+                    6
+                  </div>
+                  <div className="text-gray-600 font-semibold mt-2">Specializations</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-secondary-600">
+                    24/7
+                  </div>
+                  <div className="text-gray-600 font-semibold mt-2">Availability</div>
+                </div>
+              </div>
             </div>
 
             {/* Service Types */}
-            <div className="mb-12">
-              <div className="text-center mb-8">
-                <h2 className="text-3xl font-bold text-gray-900 mb-3">
+            <div className="mb-16">
+              <div className="text-center mb-12">
+                <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
                   Browse by Specialty
                 </h2>
-                <p className="text-gray-600 text-lg">
+                <p className="text-gray-600 text-xl max-w-2xl mx-auto">
                   Find the right healthcare professional for your needs
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {serviceTypes.map((type) => (
                   <button
                     key={type.value}
-                    onClick={() => router.push(`/providers?providerType=${type.value}`)}
-                    className="bg-white border border-gray-200 p-8 rounded-lg hover:border-primary-600 transition-all text-left group"
+                    onClick={() => router.push(`/providers?specialization=${type.value}`)}
+                    className="group relative bg-white rounded-2xl p-8 shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border-2 border-transparent hover:border-opacity-50 overflow-hidden"
                   >
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="text-4xl">
-                        {type.icon}
+                    {/* Gradient background on hover */}
+                    <div className={`absolute inset-0 bg-gradient-to-br ${type.bgGradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}></div>
+
+                    {/* Content */}
+                    <div className="relative z-10">
+                      {/* Icon with gradient */}
+                      <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${type.gradient} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                        <span className="text-4xl">{type.icon}</span>
                       </div>
-                      <svg
-                        className="w-5 h-5 text-gray-400 transform group-hover:translate-x-1 group-hover:text-primary-600 transition-all"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
+
+                      <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-gray-900 group-hover:to-gray-700">
+                        {type.name}
+                      </h3>
+                      <p className="text-gray-600 leading-relaxed mb-4 group-hover:text-gray-700">
+                        {type.description}
+                      </p>
+
+                      {/* Arrow */}
+                      <div className="flex items-center text-gray-400 group-hover:text-gray-600 transition-colors">
+                        <span className="text-sm font-semibold mr-2">Explore</span>
+                        <svg
+                          className="w-5 h-5 transform group-hover:translate-x-2 transition-transform duration-300"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                        </svg>
+                      </div>
                     </div>
-                    <h3 className="text-lg font-bold text-gray-900 mb-2">
-                      {type.name}
-                    </h3>
-                    <p className="text-sm text-gray-600 leading-relaxed">
-                      {type.description}
-                    </p>
                   </button>
                 ))}
               </div>

@@ -1,10 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 import type { Provider, Service, TimeSlot } from '@/types';
 import { format, addDays, isSameDay, startOfDay, getDay } from 'date-fns';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 // Calendar Day Component
 function CalendarDay({
@@ -173,10 +175,138 @@ END:VCALENDAR`;
   );
 }
 
+// Chat Interface Component
+function ChatInterface({
+  provider,
+  messages,
+  input,
+  onInputChange,
+  onSendMessage,
+  onClose
+}: {
+  provider: Provider;
+  messages: Array<{ role: 'user' | 'assistant'; content: string }>;
+  input: string;
+  onInputChange: (value: string) => void;
+  onSendMessage: () => void;
+  onClose: () => void;
+}) {
+  const chatEndRef = useRef<HTMLDivElement | null>(null);
+
+  // Scroll to bottom when messages change
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      onSendMessage();
+    }
+  };
+
+  const providerName = provider.firstName && provider.lastName
+    ? `${provider.firstName} ${provider.lastName}`
+    : provider.clinicName || 'Provider';
+
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-end sm:items-center justify-center z-50 p-0 sm:p-4">
+      <div className="bg-white w-full sm:max-w-2xl h-[100vh] sm:h-[90vh] sm:rounded-2xl shadow-2xl flex flex-col">
+        {/* Chat Header */}
+        <div className="bg-gradient-to-r from-primary-600 to-primary-700 p-6 sm:rounded-t-2xl flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+              </svg>
+            </div>
+            <div>
+              <h3 className="text-white font-bold text-lg">{providerName}'s Assistant</h3>
+              <p className="text-white/80 text-sm">AI Booking Assistant</p>
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            className="w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-all"
+          >
+            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Chat Messages */}
+        <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50">
+          {messages.map((message, index) => (
+            <div
+              key={index}
+              className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+            >
+              <div
+                className={`max-w-[80%] rounded-2xl px-5 py-3 ${
+                  message.role === 'user'
+                    ? 'bg-primary-600 text-white'
+                    : 'bg-white text-gray-900 border border-gray-200 shadow-sm'
+                }`}
+              >
+                {message.role === 'assistant' && (
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-6 h-6 bg-primary-100 rounded-full flex items-center justify-center">
+                      <svg className="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                      </svg>
+                    </div>
+                    <span className="text-xs font-semibold text-gray-600">AI Assistant</span>
+                  </div>
+                )}
+                <div className="text-sm leading-relaxed prose prose-sm max-w-none prose-headings:mt-3 prose-headings:mb-2 prose-p:my-2 prose-ul:my-2 prose-li:my-1 prose-strong:text-gray-900 prose-strong:font-semibold prose-table:border-collapse prose-table:w-full prose-th:border prose-th:border-gray-300 prose-th:bg-gray-100 prose-th:px-3 prose-th:py-2 prose-th:text-left prose-td:border prose-td:border-gray-300 prose-td:px-3 prose-td:py-2">
+                  {message.role === 'assistant' ? (
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.content}</ReactMarkdown>
+                  ) : (
+                    <p className="whitespace-pre-wrap">{message.content}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+          <div ref={chatEndRef} />
+        </div>
+
+        {/* Chat Input */}
+        <div className="border-t border-gray-200 p-4 bg-white sm:rounded-b-2xl">
+          <div className="flex gap-3">
+            <textarea
+              value={input}
+              onChange={(e) => onInputChange(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Type your message here..."
+              rows={1}
+              className="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-600 focus:border-primary-600 text-gray-900 resize-none"
+            />
+            <button
+              onClick={onSendMessage}
+              disabled={!input.trim()}
+              className="bg-primary-600 hover:bg-primary-700 text-white px-6 rounded-xl font-semibold transition-all disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center gap-2"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+              </svg>
+              <span className="hidden sm:inline">Send</span>
+            </button>
+          </div>
+          <p className="text-xs text-gray-500 mt-2">
+            Press Enter to send, Shift+Enter for new line
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function ProviderDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const providerId = params.id as string;
+  const providerId = decodeURIComponent(params.id as string);
 
   const [provider, setProvider] = useState<Provider | null>(null);
   const [services, setServices] = useState<Service[]>([]);
@@ -191,6 +321,9 @@ export default function ProviderDetailPage() {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [bookingData, setBookingData] = useState<any>(null);
   const [hasAvailability, setHasAvailability] = useState(true);
+  const [showChat, setShowChat] = useState(false);
+  const [chatMessages, setChatMessages] = useState<Array<{ role: 'user' | 'assistant'; content: string }>>([]);
+  const [chatInput, setChatInput] = useState('');
 
   // Generate next 30 days for calendar
   const calendarDays = Array.from({ length: 30 }, (_, i) => addDays(new Date(), i));
@@ -204,6 +337,20 @@ export default function ProviderDetailPage() {
       fetchTimeSlots();
     }
   }, [selectedDate]);
+
+  // Initialize chat with greeting message when opened
+  useEffect(() => {
+    if (showChat && chatMessages.length === 0 && provider) {
+      const providerName = provider.firstName && provider.lastName
+        ? `${provider.firstName} ${provider.lastName}`
+        : provider.clinicName || 'our';
+
+      setChatMessages([{
+        role: 'assistant',
+        content: `Good day! I am ${providerName}'s assistant. I can show you the available time slots and help you secure a booking. How can I help you today?`
+      }]);
+    }
+  }, [showChat, provider]);
 
   const fetchProviderData = async () => {
     setLoading(true);
@@ -283,6 +430,83 @@ export default function ProviderDetailPage() {
     }
   };
 
+  const handleSendChatMessage = async () => {
+    if (!chatInput.trim() || !provider) return;
+
+    // Add user message
+    const newMessages = [
+      ...chatMessages,
+      { role: 'user' as const, content: chatInput }
+    ];
+    setChatMessages(newMessages);
+    const currentInput = chatInput;
+    setChatInput('');
+
+    try {
+      // Call the booking chat API
+      console.log('[Chat] Sending message:', currentInput);
+      console.log('[Chat] Provider ID:', providerId);
+      console.log('[Chat] Conversation history:', newMessages);
+
+      const response = await api.bookingChat(providerId, currentInput, newMessages);
+
+      console.log('[Chat] Response received:', response);
+      console.log('[Chat] Response.success:', response.success);
+      console.log('[Chat] Response.data:', response.data);
+
+      if (response.success && response.data) {
+        // Add AI response
+        console.log('[Chat] Adding AI message:', response.data.message);
+        setChatMessages([
+          ...newMessages,
+          {
+            role: 'assistant' as const,
+            content: response.data.message
+          }
+        ]);
+
+        // If AI returned booking data, show success message
+        if (response.data.bookingData && response.data.bookingData.bookingId) {
+          console.log('[Chat] Booking created:', response.data.bookingData);
+          // Show a success message in the chat
+          setTimeout(() => {
+            setChatMessages([
+              ...newMessages,
+              {
+                role: 'assistant' as const,
+                content: response.data.message
+              },
+              {
+                role: 'assistant' as const,
+                content: '✅ **Booking Confirmed!**\n\nYour appointment has been successfully booked. You will receive a confirmation email shortly with all the details.'
+              }
+            ]);
+          }, 100);
+        }
+      } else {
+        // Error fallback
+        console.error('[Chat] Response not successful or no data');
+        console.error('[Chat] Response error:', response.error);
+        setChatMessages([
+          ...newMessages,
+          {
+            role: 'assistant' as const,
+            content: 'Sorry, I encountered an error. Please try using the booking panel on the right to book your appointment.'
+          }
+        ]);
+      }
+    } catch (error) {
+      console.error('[Chat] Exception caught:', error);
+      setChatMessages([
+        ...newMessages,
+        {
+          role: 'assistant' as const,
+          content: 'Sorry, I encountered an error. Please try using the booking panel on the right to book your appointment.'
+        }
+      ]);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
@@ -336,6 +560,18 @@ export default function ProviderDetailPage() {
         />
       )}
 
+      {/* Chat Interface */}
+      {showChat && (
+        <ChatInterface
+          provider={provider}
+          messages={chatMessages}
+          input={chatInput}
+          onInputChange={setChatInput}
+          onSendMessage={handleSendChatMessage}
+          onClose={() => setShowChat(false)}
+        />
+      )}
+
       {/* Header */}
       <header className="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
@@ -361,6 +597,36 @@ export default function ProviderDetailPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column - Provider Info & Services */}
           <div className="lg:col-span-2 space-y-6">
+            {/* Clinic Image Banner */}
+            {provider.clinicImage && (
+              <div className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100">
+                <div className="relative h-72 overflow-hidden">
+                  <img
+                    src={provider.clinicImage}
+                    alt={provider.clinicName || 'Clinic'}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                  <div className="absolute bottom-0 left-0 right-0 p-8">
+                    {provider.clinicName && (
+                      <h2 className="text-3xl font-bold text-white mb-2 drop-shadow-lg">
+                        {provider.clinicName}
+                      </h2>
+                    )}
+                    {provider.location && (
+                      <div className="flex items-center gap-2 text-white/90 drop-shadow">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <span className="font-medium">{provider.location}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Provider Profile Card */}
             <div className="bg-white rounded-2xl shadow-md p-8 border border-gray-100">
               <div className="flex items-start justify-between mb-6">
@@ -386,32 +652,24 @@ export default function ProviderDetailPage() {
                   {provider.specialization && (
                     <p className="text-xl text-gray-600 font-medium">{provider.specialization}</p>
                   )}
+                  {!provider.clinicImage && provider.clinicName && (
+                    <div className="mt-4 flex items-center gap-2 text-gray-700">
+                      <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                      </svg>
+                      <span className="font-semibold">{provider.clinicName}</span>
+                    </div>
+                  )}
+                  {!provider.clinicImage && provider.location && (
+                    <div className="mt-2 flex items-center gap-2 text-gray-600">
+                      <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                      <span>{provider.location}</span>
+                    </div>
+                  )}
                 </div>
-              </div>
-
-              <div className="flex items-center gap-6 mb-6">
-                <div className="flex items-center bg-gradient-to-r from-amber-50 to-yellow-50 px-5 py-3 rounded-xl border border-amber-200">
-                  <svg className="w-6 h-6 text-amber-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                  <span className="font-bold text-gray-900 text-2xl">
-                    {provider.rating ? provider.rating.toFixed(1) : '0.0'}
-                  </span>
-                  <span className="text-sm text-gray-500 ml-2">
-                    ({provider.totalReviews || 0} reviews)
-                  </span>
-                </div>
-
-                {provider.yearsOfExperience !== undefined && (
-                  <div className="flex items-center bg-gray-50 px-5 py-3 rounded-xl border border-gray-200">
-                    <svg className="w-5 h-5 text-gray-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                    <span className="font-semibold text-gray-900">
-                      {provider.yearsOfExperience} {provider.yearsOfExperience === 1 ? 'year' : 'years'} experience
-                    </span>
-                  </div>
-                )}
               </div>
 
               {provider.bio && (
@@ -630,6 +888,20 @@ export default function ProviderDetailPage() {
           </div>
         </div>
       </div>
+
+      {/* Floating Chat Button */}
+      {!showChat && (
+        <button
+          onClick={() => setShowChat(true)}
+          className="fixed bottom-6 right-6 w-16 h-16 bg-gradient-to-br from-primary-600 to-primary-700 text-white rounded-full shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 flex items-center justify-center z-40 group"
+          aria-label="Open chat"
+        >
+          <svg className="w-7 h-7 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+          </svg>
+          <div className="absolute -top-1 -right-1 w-5 h-5 bg-green-500 border-2 border-white rounded-full animate-pulse"></div>
+        </button>
+      )}
     </div>
   );
 }

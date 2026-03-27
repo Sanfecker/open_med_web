@@ -15,7 +15,7 @@ export interface Provider {
   userId: string;
   providerType: string;
   specialization?: string;
-  yearsOfExperience: number;
+  yearsOfExperience?: number;
   bio?: string;
   rating: number;
   totalReviews: number;
@@ -29,6 +29,11 @@ export interface Provider {
   // User info (populated from search)
   firstName?: string;
   lastName?: string;
+
+  // Clinic info
+  clinicName?: string;
+  clinicImage?: string;
+  location?: string;
 }
 
 // Service types

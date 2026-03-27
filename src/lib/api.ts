@@ -303,6 +303,17 @@ class OpenMedAPI {
     });
   }
 
+  async bookingChat(
+    providerId: string,
+    message: string,
+    conversationHistory: Array<{ role: 'user' | 'assistant'; content: string }>
+  ): Promise<ApiResponse<{ message: string; bookingData?: any }>> {
+    return this.request<{ message: string; bookingData?: any }>('/ai/booking-chat', {
+      method: 'POST',
+      body: JSON.stringify({ providerId, message, conversationHistory }),
+    });
+  }
+
   // ========== Provider Onboarding ==========
 
   async completeOnboarding(): Promise<ApiResponse<{ provider: Provider }>> {
